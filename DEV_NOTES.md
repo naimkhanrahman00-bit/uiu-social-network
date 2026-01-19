@@ -41,3 +41,16 @@
   - Fixed a syntax error in `App.jsx` during routing.
 - **Next Steps**: Implement Edit Post or move to Story 2.7 (Expiration System).
 
+### 2026-01-20 - Antigravity
+- **Accomplished**:
+  - Implemented **Story 3.1 (Create Marketplace Listing)**:
+    - Created database tables: `marketplace_categories`, `marketplace_listings`, `listing_images` (via `setup_marketplace_db.js`).
+    - Seeded initial categories.
+    - Created Backend: Model (`Marketplace.js`), Controller (`marketplaceController.js`), Routes (`marketplaceRoutes.js`).
+    - Created Frontend: `CreateMarketplaceListing.jsx` with multi-image upload.
+    - Updated `Navbar` and `App.jsx` to include Marketplace routes.
+- **Notes**:
+  - Added "Sell Item" link to Navbar for logged-in users.
+  - Used a separate Multer configuration for marketplace images (`uploads/marketplace/`).
+
+

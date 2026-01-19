@@ -13,6 +13,8 @@ import MyLostFoundPosts from './pages/MyLostFoundPosts';
 import EditLostFoundPost from './pages/EditLostFoundPost';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
+import CreateMarketplaceListing from './pages/CreateMarketplaceListing';
+import MarketplaceFeed from './pages/MarketplaceFeed';
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+
           <Route
             path="/profile"
             element={
@@ -33,6 +36,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* Lost & Found Routes */}
           <Route
             path="/lost-found"
             element={
@@ -57,7 +62,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/lost-found/my-posts"
             element={
@@ -71,6 +75,24 @@ function App() {
             element={
               <ProtectedRoute>
                 <EditLostFoundPost />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Marketplace Routes */}
+          <Route
+            path="/marketplace"
+            element={
+              <ProtectedRoute>
+                <MarketplaceFeed />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/marketplace/create"
+            element={
+              <ProtectedRoute>
+                <CreateMarketplaceListing />
               </ProtectedRoute>
             }
           />

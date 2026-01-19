@@ -28,6 +28,12 @@ const Navbar = () => {
                             <Link to="/lost-found" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
                                 Lost & Found
                             </Link>
+                            <Link to="/marketplace" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
+                                Marketplace
+                            </Link>
+                            <Link to="/marketplace/create" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
+                                Sell Item
+                            </Link>
                             <Link to="/profile" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
                                 Hello, {user.full_name}
                             </Link>
