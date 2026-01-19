@@ -6,6 +6,10 @@ import Login from './pages/Login';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import Profile from './pages/Profile';
+import PostLostItem from './pages/PostLostItem';
+import LostFoundFeed from './pages/LostFoundFeed';
+import LostFoundDetails from './pages/LostFoundDetails';
+import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
@@ -19,7 +23,38 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/lost-found"
+            element={
+              <ProtectedRoute>
+                <LostFoundFeed />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/lost-found/new"
+            element={
+              <ProtectedRoute>
+                <PostLostItem />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/lost-found/:id"
+            element={
+              <ProtectedRoute>
+                <LostFoundDetails />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Router>
     </AuthProvider>

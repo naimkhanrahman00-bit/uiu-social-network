@@ -26,7 +26,14 @@
     - [ ] Design Responsive Layout Wrapper <!-- id: 21 -->
 
 - [ ] **Phase 4: Features (See PRD for details)** <!-- id: 22 -->
-    - [ ] Epic 2: Lost & Found <!-- id: 23 -->
+    - [x] Epic 2: Lost & Found <!-- id: 23 -->
+        - [x] Story 2.1: Post Lost Item
+        - [x] Story 2.2: Post Found Item
+        - [x] Story 2.3: Lost & Found Feed
+        - [x] Story 2.4: Item Details Page
+        - [ ] Story 2.5: Claim/Update Status
+        - [ ] Story 2.6: My Posts
+        - [ ] Story 2.7: Expiration System
     - [ ] Epic 3: Marketplace <!-- id: 24 -->
     - [ ] Epic 4: ResourceHub <!-- id: 25 -->
     - [ ] Epic 5: Section Issue <!-- id: 26 -->

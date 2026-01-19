@@ -25,6 +25,9 @@ const Navbar = () => {
                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                     {user ? (
                         <>
+                            <Link to="/lost-found" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
+                                Lost & Found
+                            </Link>
                             <Link to="/profile" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
                                 Hello, {user.full_name}
                             </Link>

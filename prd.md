@@ -139,7 +139,7 @@ Complete user authentication system with university email validation, profile ma
 - [ ] Task 1.2.1: Create login API endpoint (`POST /api/auth/login`)
 - [ ] Task 1.2.2: Implement JWT token generation and validation
 - [ ] Task 1.2.3: Design and build login form UI
-- [/] Task 1.2.4: Implement protected routes on frontend
+- [x] Task 1.2.4: Implement protected routes on frontend
 - [x] Task 1.2.5: Store and manage JWT in localStorage/cookies
 
 ---
@@ -196,9 +196,9 @@ Complete user authentication system with university email validation, profile ma
 - All protected routes become inaccessible
 
 #### Tasks
-- [/] Task 1.5.1: Implement logout functionality on frontend
-- [/] Task 1.5.2: Clear auth tokens and user state
-- [/] Task 1.5.3: Add logout button to navigation
+- [x] Task 1.5.1: Implement logout functionality on frontend
+- [x] Task 1.5.2: Clear auth tokens and user state
+- [x] Task 1.5.3: Add logout button to navigation
 
 ---
 
@@ -222,12 +222,12 @@ System for posting, tracking, and claiming lost items including ID cards and gen
 - Post has expiration date (30 days)
 
 #### Tasks
-- [ ] Task 2.1.1: Create lost_found_posts table in database
-- [ ] Task 2.1.2: Create lost_found_categories table (ID Card, Items with subcategories)
-- [ ] Task 2.1.3: Create post lost item API (`POST /api/lost-found`)
-- [ ] Task 2.1.4: Build post lost item form UI
-- [ ] Task 2.1.5: Implement image upload for items
-- [ ] Task 2.1.6: Add form validation
+- [x] Task 2.1.1: Create lost_found_posts table in database
+- [x] Task 2.1.2: Create lost_found_categories table (ID Card, Items with subcategories)
+- [x] Task 2.1.3: Create post lost item API (`POST /api/lost-found`)
+- [x] Task 2.1.4: Build post lost item form UI
+- [x] Task 2.1.5: Implement image upload for items
+- [x] Task 2.1.6: Add form validation
 
 ---
 
@@ -242,9 +242,9 @@ System for posting, tracking, and claiming lost items including ID cards and gen
 - Contact information shown to potential owners
 
 #### Tasks
-- [ ] Task 2.2.1: Extend post API to handle found items
-- [ ] Task 2.2.2: Build post found item form UI
-- [ ] Task 2.2.3: Add collection location field
+- [x] Task 2.2.1: Extend post API to handle found items
+- [x] Task 2.2.2: Build post found item form UI
+- [x] Task 2.2.3: Add collection location field
 
 ---
 
