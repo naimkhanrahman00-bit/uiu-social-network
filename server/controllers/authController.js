@@ -80,7 +80,7 @@ const loginUser = async (req, res) => {
 
         if (user && (await bcrypt.compare(password, user.password_hash))) {
             res.json({
-                _id: user.id,
+                id: user.id,
                 full_name: user.full_name,
                 email: user.email,
                 student_id: user.student_id,

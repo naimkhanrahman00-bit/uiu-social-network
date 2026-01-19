@@ -14,16 +14,16 @@ class LostFoundPost {
             location,
             date_lost_found,
             image_path,
-            status,
-            expires_at,
             collection_location
         } = postData;
 
-        // Ensure undefined values are replaced with null
+        // Default 'lost' or 'found' status based on type
+        const initialStatus = type === 'found' ? 'found' : 'lost';
+
         const sql = `
             INSERT INTO lost_found_posts 
             (user_id, category_id, type, title, description, name_on_card, card_student_id, card_department, location, date_lost_found, image_path, status, expires_at, collection_location)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, DATE_ADD(NOW(), INTERVAL 30 DAY), ?)
         `;
 
         const [result] = await db.execute(sql, [
@@ -38,8 +38,7 @@ class LostFoundPost {
             location,
             date_lost_found,
             image_path || null,
-            status,
-            expires_at,
+            initialStatus,
             collection_location || null
         ]);
 
@@ -62,6 +61,11 @@ class LostFoundPost {
         `;
         const params = [];
 
+        // Filter expired posts by default, unless included
+        if (!filters.include_expired) {
+            sql += ` AND p.expires_at > NOW()`;
+        }
+
         if (filters.type) {
             sql += ` AND p.type = ?`;
             params.push(filters.type);
@@ -70,6 +74,11 @@ class LostFoundPost {
         if (filters.search) {
             sql += ` AND (p.title LIKE ? OR p.description LIKE ?)`;
             params.push(`%${filters.search}%`, `%${filters.search}%`);
+        }
+
+        if (filters.user_id) {
+            sql += ` AND p.user_id = ?`;
+            params.push(filters.user_id);
         }
 
         sql += ` ORDER BY p.created_at DESC`;
@@ -88,6 +97,74 @@ class LostFoundPost {
         `;
         const [rows] = await db.execute(sql, [id]);
         return rows[0];
+    }
+
+    static async delete(id) {
+        const sql = `DELETE FROM lost_found_posts WHERE id = ?`;
+        const [result] = await db.execute(sql, [id]);
+        return result.affectedRows > 0;
+    }
+
+    static async updateStatus(id, status) {
+        const sql = `UPDATE lost_found_posts SET status = ? WHERE id = ?`;
+        const [result] = await db.execute(sql, [status, id]);
+        return result.affectedRows > 0;
+    }
+
+    static async update(id, postData) {
+        const {
+            category_id,
+            title,
+            description,
+            name_on_card,
+            card_student_id,
+            card_department,
+            location,
+            date_lost_found,
+            image_path, // Optional, only if updated
+            collection_location
+        } = postData;
+
+        let sql = `
+            UPDATE lost_found_posts SET
+                category_id = ?,
+                title = ?,
+                description = ?,
+                name_on_card = ?,
+                card_student_id = ?,
+                card_department = ?,
+                location = ?,
+                date_lost_found = ?,
+                collection_location = ?
+        `;
+        const params = [
+            category_id,
+            title,
+            description || null,
+            name_on_card || null,
+            card_student_id || null,
+            card_department || null,
+            location,
+            date_lost_found,
+            collection_location || null
+        ];
+
+        if (image_path) {
+            sql += `, image_path = ?`;
+            params.push(image_path);
+        }
+
+        sql += ` WHERE id = ?`;
+        params.push(id);
+
+        const [result] = await db.execute(sql, params);
+        return result.affectedRows > 0;
+    }
+
+    static async renew(id) {
+        const sql = `UPDATE lost_found_posts SET expires_at = DATE_ADD(NOW(), INTERVAL 30 DAY) WHERE id = ?`;
+        const [result] = await db.execute(sql, [id]);
+        return result.affectedRows > 0;
     }
 }
 

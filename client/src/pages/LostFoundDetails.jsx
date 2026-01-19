@@ -29,7 +29,7 @@ const LostFoundDetails = () => {
     const onDelete = async () => {
         if (!window.confirm('Are you sure you want to delete this post?')) return;
         try {
-            await api.delete(`/lost-found/${id}`); // We need to implement this endpoint too for full functionality!
+            await api.delete(`/lost-found/${id}`);
             setMsg('Post deleted successfully.');
             setTimeout(() => navigate('/lost-found'), 2000);
         } catch (err) {
@@ -38,16 +38,55 @@ const LostFoundDetails = () => {
         }
     };
 
+    const onStatusUpdate = async (newStatus) => {
+        try {
+            await api.patch(`/lost-found/${id}/status`, { status: newStatus });
+            setPost({ ...post, status: newStatus });
+            setMsg(`Status updated to ${newStatus}`);
+            // Clear message after 3 seconds
+            setTimeout(() => setMsg(''), 3000);
+        } catch (err) {
+            console.error(err);
+            setMsg('Error updating status.');
+        }
+    };
+
+    const onRenew = async () => {
+        try {
+            await api.patch(`/lost-found/${id}/renew`);
+            // Update local state to reflect new expiration (add 30 days roughly)
+            const newDate = new Date();
+            newDate.setDate(newDate.getDate() + 30);
+            setPost({ ...post, expires_at: newDate.toISOString() }); // Simple client-side update
+            setMsg('Post renewed successfully!');
+            setTimeout(() => setMsg(''), 3000);
+        } catch (err) {
+            console.error(err);
+            setMsg('Error renewing post.');
+        }
+    };
+
     if (loading) return <div className="container">Loading details...</div>;
     if (!post) return <div className="container">{msg}</div>;
 
-    const isOwner = user && user.id === post.user_id;
+    // Check for id (new) or _id (legacy/mongo)
+    const userId = user ? (user.id || user._id) : null;
+    const isOwner = user && post && (String(userId) === String(post.user_id));
+    const isExpired = post.expires_at && new Date(post.expires_at) < new Date();
 
     return (
         <div className="container" style={{ margin: '2rem auto', maxWidth: '800px' }}>
             <button onClick={() => navigate(-1)} className="btn btn-outline" style={{ marginBottom: '1rem' }}>&larr; Back</button>
 
+            {msg && <div style={{ padding: '1rem', background: '#f0f9ff', color: '#0369a1', marginBottom: '1rem', borderRadius: '4px' }}>{msg}</div>}
+
             <div className="card">
+                {isExpired && (
+                    <div style={{ background: '#000', color: '#fff', padding: '1rem', marginBottom: '1rem', borderRadius: '4px', textAlign: 'center' }}>
+                        <strong>This post has expired and is checking hidden from the public feed.</strong>
+                        {isOwner && <div style={{ marginTop: '0.5rem' }}><button onClick={onRenew} className="btn btn-primary" style={{ border: '1px solid white' }}>Renew for 30 Days</button></div>}
+                    </div>
+                )}
                 {post.image_path && (
                     <img
                         src={`http://localhost:5000${post.image_path}`}
@@ -72,6 +111,20 @@ const LostFoundDetails = () => {
                             }}
                         >
                             {post.type}
+                        </span>
+                        <span
+                            style={{
+                                textTransform: 'uppercase',
+                                fontSize: '0.875rem',
+                                fontWeight: 'bold',
+                                color: '#fff',
+                                background: post.status === 'claimed' || post.status === 'returned' ? '#6b7280' : (post.status === 'lost' ? '#ef4444' : '#166534'),
+                                padding: '0.25rem 0.5rem',
+                                borderRadius: '4px',
+                                marginRight: '1rem'
+                            }}
+                        >
+                            {post.status}
                         </span>
                         <span style={{ color: '#666' }}>{new Date(post.created_at).toLocaleDateString()}</span>
                     </div>
@@ -110,7 +163,7 @@ const LostFoundDetails = () => {
                     {/* In a real app, we might check privacy settings before showing email */}
                     <p><strong>Email:</strong> <a href={`mailto:${post.email}`}>{post.email}</a></p>
 
-                    <div style={{ marginTop: '1.5rem', display: 'flex', gap: '1rem' }}>
+                    <div style={{ marginTop: '1.5rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                         {!isOwner && (
                             <a href={`mailto:${post.email}?subject=Regarding your ${post.type} item: ${post.title}`} className="btn btn-primary">
                                 Contact via Email
@@ -118,7 +171,23 @@ const LostFoundDetails = () => {
                         )}
                         {isOwner && (
                             <>
-                                <button className="btn btn-outline" disabled>Edit Post (Soon)</button>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <strong>Update Status:</strong>
+                                    <select
+                                        value={post.status}
+                                        onChange={(e) => onStatusUpdate(e.target.value)}
+                                        style={{ padding: '0.5rem', borderRadius: '4px' }}
+                                    >
+                                        <option value="lost">Lost</option>
+                                        <option value="found">Found</option>
+                                        <option value="claimed">Claimed</option>
+                                        <option value="returned">Returned</option>
+                                    </select>
+                                </div>
+                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                    <button onClick={() => navigate(`/lost-found/edit/${id}`)} className="btn btn-outline">Edit</button>
+                                    <button onClick={onDelete} className="btn btn-danger" style={{ background: '#ef4444', color: 'white', border: 'none' }}>Delete</button>
+                                </div>
                             </>
                         )}
                     </div>

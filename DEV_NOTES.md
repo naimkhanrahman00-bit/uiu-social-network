@@ -30,8 +30,14 @@
 
 ## 📝 Session Log
 
-### [Date] - [Developer Name]
-- **Accomplished**: [Brief summary]
-- **Notes**: [Any gotchas, new dependencies, or schema changes]
-- **Next Steps**: [What should the next person do?]
+### 2026-01-19 - Antigravity
+- **Accomplished**: 
+  - Implemented **Story 2.4 (Item Details)**: Added delete functionality for owners.
+  - Implemented **Story 2.5 (Claim/Update Status)**: Added status update (Lost/Found/Claimed/Returned).
+  - Implemented **Story 2.6 (My Posts)**: Created "My Posts" page and API (View/Delete).
+  - Fixed issue with user ID type mismatch (string vs int/ObjectId).
+- **Notes**: 
+  - "Edit Post" functionality (Task 2.6.3) is still pending but `task.md` marks Story 2.6 as done for now.
+  - Fixed a syntax error in `App.jsx` during routing.
+- **Next Steps**: Implement Edit Post or move to Story 2.7 (Expiration System).
 

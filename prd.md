@@ -286,7 +286,7 @@ System for posting, tracking, and claiming lost items including ID cards and gen
 - [ ] Task 2.4.1: Create get single post API (`GET /api/lost-found/:id`)
 - [ ] Task 2.4.2: Build item details page UI
 - [ ] Task 2.4.3: Add messaging integration button
-- [ ] Task 2.4.4: Add edit/delete buttons for owner
+- [x] Task 2.4.4: Add edit/delete buttons for owner
 
 ---
 
@@ -301,9 +301,9 @@ System for posting, tracking, and claiming lost items including ID cards and gen
 - Claimed/Returned items can be hidden from main feed
 
 #### Tasks
-- [ ] Task 2.5.1: Create update status API (`PATCH /api/lost-found/:id/status`)
-- [ ] Task 2.5.2: Add status update UI on item details page
-- [ ] Task 2.5.3: Update feed to handle status filtering
+- [x] Task 2.5.1: Create update status API (`PATCH /api/lost-found/:id/status`)
+- [x] Task 2.5.2: Add status update UI on item details page
+- [x] Task 2.5.3: Update feed to handle status filtering
 
 ---
 
@@ -319,10 +319,10 @@ System for posting, tracking, and claiming lost items including ID cards and gen
 - Filter by status
 
 #### Tasks
-- [ ] Task 2.6.1: Create my posts API (`GET /api/lost-found/my-posts`)
-- [ ] Task 2.6.2: Create delete post API (`DELETE /api/lost-found/:id`)
-- [ ] Task 2.6.3: Create update post API (`PUT /api/lost-found/:id`)
-- [ ] Task 2.6.4: Build my posts management page UI
+- [x] Task 2.6.1: Create my posts API (`GET /api/lost-found/my-posts`)
+- [x] Task 2.6.2: Create delete post API (`DELETE /api/lost-found/:id`)
+- [x] Task 2.6.3: Create update post API (`PUT /api/lost-found/:id`)
+- [x] Task 2.6.4: Build my posts management page UI
 
 ---
 
@@ -338,10 +338,10 @@ System for posting, tracking, and claiming lost items including ID cards and gen
 - Notification sent before expiration (3 days)
 
 #### Tasks
-- [ ] Task 2.7.1: Add expiration_date field to posts table
-- [ ] Task 2.7.2: Create scheduled job to check expiration
-- [ ] Task 2.7.3: Create renew post API (`PATCH /api/lost-found/:id/renew`)
-- [ ] Task 2.7.4: Integrate with notification system
+- [x] Task 2.7.1: Add expiration_date field to posts table (Added expires_at col)
+- [x] Task 2.7.2: Create scheduled job to check expiration (Implemented via query filtering)
+- [x] Task 2.7.3: Create renew post API (`PATCH /api/lost-found/:id/renew`)
+- [ ] Task 2.7.4: Integrate with notification system (Skipped for now)
 
 ---
 

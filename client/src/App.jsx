@@ -9,6 +9,8 @@ import Profile from './pages/Profile';
 import PostLostItem from './pages/PostLostItem';
 import LostFoundFeed from './pages/LostFoundFeed';
 import LostFoundDetails from './pages/LostFoundDetails';
+import MyLostFoundPosts from './pages/MyLostFoundPosts';
+import EditLostFoundPost from './pages/EditLostFoundPost';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 
@@ -52,6 +54,23 @@ function App() {
             element={
               <ProtectedRoute>
                 <LostFoundDetails />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/lost-found/my-posts"
+            element={
+              <ProtectedRoute>
+                <MyLostFoundPosts />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/lost-found/edit/:id"
+            element={
+              <ProtectedRoute>
+                <EditLostFoundPost />
               </ProtectedRoute>
             }
           />

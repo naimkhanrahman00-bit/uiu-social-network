@@ -97,9 +97,161 @@ const getPostById = async (req, res) => {
     }
 };
 
+// @desc    Delete a post
+// @route   DELETE /api/lost-found/:id
+// @access  Private
+const deletePost = async (req, res) => {
+    try {
+        const post = await LostFoundPost.getById(req.params.id);
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        // Check user ownership
+        if (post.user_id !== req.user.id) { // Assuming req.user is set by auth middleware
+            return res.status(403).json({ message: 'Not authorized to delete this post' });
+        }
+
+        await LostFoundPost.delete(req.params.id);
+        res.json({ message: 'Post removed' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error: ' + error.message });
+    }
+};
+
+// @desc    Update post status
+// @route   PATCH /api/lost-found/:id/status
+// @access  Private
+const updatePostStatus = async (req, res) => {
+    try {
+        const { status } = req.body;
+        const validStatuses = ['lost', 'found', 'claimed', 'returned'];
+
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ message: 'Invalid status' });
+        }
+
+        const post = await LostFoundPost.getById(req.params.id);
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        // Check user ownership
+        if (post.user_id !== req.user.id) {
+            return res.status(403).json({ message: 'Not authorized to update this post' });
+        }
+
+        await LostFoundPost.updateStatus(req.params.id, status);
+        res.json({ message: 'Status updated', status });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error: ' + error.message });
+    }
+};
+
+// @desc    Get current user's posts
+// @route   GET /api/lost-found/my-posts
+// @access  Private
+const getMyPosts = async (req, res) => {
+    try {
+        // Include expired posts for the owner so they can renew them
+        const posts = await LostFoundPost.getAll({
+            user_id: req.user.id,
+            include_expired: true
+        });
+        res.json(posts);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error: ' + error.message });
+    }
+};
+
+// @desc    Renew a post
+// @route   PATCH /api/lost-found/:id/renew
+// @access  Private
+const renewPost = async (req, res) => {
+    try {
+        const post = await LostFoundPost.getById(req.params.id);
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        // Check user ownership
+        if (post.user_id !== req.user.id) {
+            return res.status(403).json({ message: 'Not authorized to renew this post' });
+        }
+
+        await LostFoundPost.renew(req.params.id);
+        res.json({ message: 'Post renewed for 30 days' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error: ' + error.message });
+    }
+};
+
+// @desc    Update a post
+// @route   PUT /api/lost-found/:id
+// @access  Private
+const updatePost = async (req, res) => {
+    try {
+        const {
+            category_id,
+            title,
+            description,
+            name_on_card,
+            card_student_id,
+            card_department,
+            location,
+            date_lost_found,
+            collection_location
+        } = req.body;
+
+        const post = await LostFoundPost.getById(req.params.id);
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        // Check user ownership
+        if (post.user_id !== req.user.id) {
+            return res.status(403).json({ message: 'Not authorized to update this post' });
+        }
+
+        const image_path = req.file ? `/uploads/items/${req.file.filename}` : null;
+
+        await LostFoundPost.update(req.params.id, {
+            category_id,
+            title,
+            description,
+            name_on_card,
+            card_student_id,
+            card_department,
+            location,
+            date_lost_found,
+            image_path,
+            collection_location
+        });
+
+        res.json({ message: 'Post updated successfully' });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error: ' + error.message });
+    }
+};
+
 module.exports = {
     createPost,
     getCategories,
     getAllPosts,
-    getPostById
+    getPostById,
+    deletePost,
+    updatePostStatus,
+    getMyPosts,
+    updatePost,
+    renewPost
 };
