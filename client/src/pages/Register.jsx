@@ -25,8 +25,9 @@ const Register = () => {
         setMsg('');
 
         // Basic validation
-        if (!email.endsWith('@uiu.ac.bd')) {
-            return setError('Email must end with @uiu.ac.bd');
+        const emailRegex = /^[^\s@]+@[a-zA-Z0-9]+\.uiu\.ac\.bd$/;
+        if (!emailRegex.test(email)) {
+            return setError('Email must follow the format (e.g., id@cse.uiu.ac.bd)');
         }
 
         try {
@@ -54,7 +55,7 @@ const Register = () => {
 
                     <div className="form-group">
                         <label className="form-label">University Email</label>
-                        <input type="email" name="email" value={email} onChange={onChange} className="form-input" placeholder="example@uiu.ac.bd" required />
+                        <input type="email" name="email" value={email} onChange={onChange} className="form-input" placeholder="id@department.uiu.ac.bd" required />
                     </div>
 
                     <div className="form-group">

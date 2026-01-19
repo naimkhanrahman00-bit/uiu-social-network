@@ -1,24 +1,24 @@
 # Project Tasks
 
-- [ ] **Phase 1: Foundation (Setup)** <!-- id: 0 -->
+- [/] **Phase 1: Foundation (Setup)** <!-- id: 0 -->
     - [ ] Initialize Git Repo (already done) <!-- id: 1 -->
     - [ ] Create `.gitignore`, `CONTRIBUTING.md`, `DEV_NOTES.md` <!-- id: 2 -->
-    - [ ] **Backend Setup** <!-- id: 3 -->
-        - [ ] Initialize `server` folder (`npm init`) <!-- id: 4 -->
-        - [ ] Install dependencies (express, mysql2, cors, dotenv, etc.) <!-- id: 5 -->
-        - [ ] Setup basic folder structure (controllers, routes, config) <!-- id: 6 -->
-        - [ ] Connect to local MySQL database <!-- id: 7 -->
-    - [ ] **Frontend Setup** <!-- id: 8 -->
-        - [ ] Initialize `client` folder (Vite + React) <!-- id: 9 -->
-        - [ ] Install basic dependencies (axios, react-router-dom) <!-- id: 10 -->
-        - [ ] Setup folder structure (components, pages, context) <!-- id: 11 -->
-    - [ ] **Database** <!-- id: 12 -->
-        - [ ] Run initial SQL script to create tables <!-- id: 13 -->
+    - [x] **Backend Setup** <!-- id: 3 -->
+        - [x] Initialize `server` folder (`npm init`) <!-- id: 4 -->
+        - [x] Install dependencies (express, mysql2, cors, dotenv, etc.) <!-- id: 5 -->
+        - [x] Setup basic folder structure (controllers, routes, config) <!-- id: 6 -->
+        - [x] Connect to local MySQL database (Configured .env) <!-- id: 7 -->
+    - [x] **Frontend Setup** <!-- id: 8 -->
+        - [x] Initialize `client` folder (Vite + React) <!-- id: 9 -->
+        - [x] Install basic dependencies (axios, react-router-dom) <!-- id: 10 -->
+        - [x] Setup folder structure (components, pages, context) <!-- id: 11 -->
+    - [x] **Database** <!-- id: 12 -->
+        - [x] Run initial SQL script to create tables <!-- id: 13 -->
 
 - [ ] **Phase 2: Authentication (Epic 1)** <!-- id: 14 -->
-    - [ ] Backend: Registration API <!-- id: 15 -->
+    - [x] Backend: Registration API <!-- id: 15 -->
     - [ ] Backend: Login API (JWT) <!-- id: 16 -->
-    - [ ] Frontend: Login/Register Pages <!-- id: 17 -->
+    - [/] Frontend: Login/Register Pages (Register done) <!-- id: 17 -->
     - [ ] Frontend: Auth Context/Provider <!-- id: 18 -->
 
 - [ ] **Phase 3: Core UI Layout** <!-- id: 19 -->

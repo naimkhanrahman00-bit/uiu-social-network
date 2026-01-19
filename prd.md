@@ -139,14 +139,14 @@ Complete user authentication system with university email validation, profile ma
 - [ ] Task 1.2.1: Create login API endpoint (`POST /api/auth/login`)
 - [ ] Task 1.2.2: Implement JWT token generation and validation
 - [ ] Task 1.2.3: Design and build login form UI
-- [ ] Task 1.2.4: Implement protected routes on frontend
-- [ ] Task 1.2.5: Store and manage JWT in localStorage/cookies
+- [/] Task 1.2.4: Implement protected routes on frontend
+- [x] Task 1.2.5: Store and manage JWT in localStorage/cookies
 
 ---
 
 ### Story 1.3: Password Recovery
-**As a** user who forgot my password  
-**I want to** reset my password via email  
+**As a** user who forgot my password
+**I want to** reset my password via email
 **So that** I can regain access to my account
 
 #### Acceptance Criteria
@@ -156,11 +156,11 @@ Complete user authentication system with university email validation, profile ma
 - User can set new password using the link
 
 #### Tasks
-- [ ] Task 1.3.1: Create forgot password API (`POST /api/auth/forgot-password`)
-- [ ] Task 1.3.2: Create reset password API (`POST /api/auth/reset-password`)
-- [ ] Task 1.3.3: Generate secure reset tokens with expiration
-- [ ] Task 1.3.4: Build forgot password UI form
-- [ ] Task 1.3.5: Build reset password UI form
+- [x] Task 1.3.1: Create forgot password API (`POST /api/auth/forgot-password`)
+- [x] Task 1.3.2: Create reset password API (`POST /api/auth/reset-password`)
+- [x] Task 1.3.3: Generate secure reset tokens with expiration
+- [x] Task 1.3.4: Build forgot password UI form
+- [x] Task 1.3.5: Build reset password UI form
 
 ---
 
@@ -176,12 +176,12 @@ Complete user authentication system with university email validation, profile ma
 - Profile picture upload (max 2MB, jpg/png only)
 
 #### Tasks
-- [ ] Task 1.4.1: Create get profile API (`GET /api/users/profile`)
-- [ ] Task 1.4.2: Create update profile API (`PUT /api/users/profile`)
-- [ ] Task 1.4.3: Implement profile picture upload with Multer
-- [ ] Task 1.4.4: Build profile view page UI
-- [ ] Task 1.4.5: Build profile edit form UI
-- [ ] Task 1.4.6: Add image preview before upload
+- [x] Task 1.4.1: Create get profile API (`GET /api/users/profile`)
+- [x] Task 1.4.2: Create update profile API (`PUT /api/users/profile`)
+- [x] Task 1.4.3: Implement profile picture upload with Multer
+- [x] Task 1.4.4: Build profile view page UI
+- [x] Task 1.4.5: Build profile edit form UI
+- [x] Task 1.4.6: Add image preview before upload
 
 ---
 
@@ -196,9 +196,9 @@ Complete user authentication system with university email validation, profile ma
 - All protected routes become inaccessible
 
 #### Tasks
-- [ ] Task 1.5.1: Implement logout functionality on frontend
-- [ ] Task 1.5.2: Clear auth tokens and user state
-- [ ] Task 1.5.3: Add logout button to navigation
+- [/] Task 1.5.1: Implement logout functionality on frontend
+- [/] Task 1.5.2: Clear auth tokens and user state
+- [/] Task 1.5.3: Add logout button to navigation
 
 ---
 
