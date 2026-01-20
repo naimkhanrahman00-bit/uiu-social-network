@@ -39,10 +39,10 @@
             - [x] Task 3.1.1: Create marketplace tables & seed categories
             - [x] Task 3.1.2: Create post listing API
             - [x] Task 3.1.3: Create listing form UI
-        - [ ] Story 3.2: Browse Marketplace Listings
-            - [ ] Task 3.2.1: Backend - Get All Listings API (Search, Filter, Sort, Pagination)
-            - [ ] Task 3.2.2: Frontend - Marketplace Feed Page (Layout, Sidebar/Header Filters)
-            - [ ] Task 3.2.3: Frontend - Listing Card Component
+        - [x] Story 3.2: Browse Marketplace Listings
+            - [x] Task 3.2.1: Backend - Get All Listings API (Search, Filter, Sort, Pagination)
+            - [x] Task 3.2.2: Frontend - Marketplace Feed Page (Layout, Sidebar/Header Filters)
+            - [x] Task 3.2.3: Frontend - Listing Card Component
     - [ ] Epic 4: ResourceHub <!-- id: 25 -->
     - [ ] Epic 5: Section Issue <!-- id: 26 -->
     - [ ] Epic 6: Feedback & Reviews <!-- id: 27 -->

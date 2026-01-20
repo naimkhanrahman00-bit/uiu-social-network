@@ -14,7 +14,7 @@ import EditLostFoundPost from './pages/EditLostFoundPost';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import CreateMarketplaceListing from './pages/CreateMarketplaceListing';
-import MarketplaceFeed from './pages/MarketplaceFeed';
+import Marketplace from './pages/Marketplace';
 
 function App() {
   return (
@@ -84,7 +84,7 @@ function App() {
             path="/marketplace"
             element={
               <ProtectedRoute>
-                <MarketplaceFeed />
+                <Marketplace />
               </ProtectedRoute>
             }
           />

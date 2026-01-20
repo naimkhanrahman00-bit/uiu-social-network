@@ -53,4 +53,10 @@
   - Added "Sell Item" link to Navbar for logged-in users.
   - Used a separate Multer configuration for marketplace images (`uploads/marketplace/`).
 
-
+  - Implemented **Story 3.2 (Browse Marketplace)**:
+    - Implemented filtering/sorting listing API (`getListings`).
+    - Created `Marketplace` page with sidebar filters and responsive grid.
+    - Verified filter logic (category, price, type, search) via browser test.
+  - **Notes**:
+    - `App.jsx` updated to use `Marketplace` component instead of `MarketplaceFeed` placeholder.
+    - Added comprehensive browser verification for marketplace flow.
