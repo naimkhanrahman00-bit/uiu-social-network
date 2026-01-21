@@ -15,6 +15,11 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import CreateMarketplaceListing from './pages/CreateMarketplaceListing';
 import Marketplace from './pages/Marketplace';
+import MarketplaceDetails from './pages/MarketplaceDetails';
+import MyMarketplaceListings from './pages/MyMarketplaceListings';
+import ManageMarketplaceCategories from './pages/admin/ManageMarketplaceCategories';
+
+console.log("App.jsx module loaded");
 
 function App() {
   return (
@@ -93,6 +98,38 @@ function App() {
             element={
               <ProtectedRoute>
                 <CreateMarketplaceListing />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/marketplace/my-listings"
+            element={
+              <ProtectedRoute>
+                <MyMarketplaceListings />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/marketplace/edit/:id"
+            element={
+              <ProtectedRoute>
+                <CreateMarketplaceListing />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/marketplace/:id"
+            element={
+              <ProtectedRoute>
+                <MarketplaceDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/marketplace-categories"
+            element={
+              <ProtectedRoute>
+                <ManageMarketplaceCategories />
               </ProtectedRoute>
             }
           />

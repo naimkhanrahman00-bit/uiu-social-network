@@ -34,6 +34,11 @@ const Navbar = () => {
                             <Link to="/marketplace/create" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
                                 Sell Item
                             </Link>
+                            {user.role === 'admin' && (
+                                <Link to="/admin/marketplace-categories" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
+                                    Admin Setup
+                                </Link>
+                            )}
                             <Link to="/profile" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
                                 Hello, {user.full_name}
                             </Link>

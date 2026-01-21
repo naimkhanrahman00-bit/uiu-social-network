@@ -13,8 +13,7 @@ class LostFoundPost {
             card_department,
             location,
             date_lost_found,
-            image_path,
-            collection_location
+            image_path
         } = postData;
 
         // Default 'lost' or 'found' status based on type
@@ -22,8 +21,8 @@ class LostFoundPost {
 
         const sql = `
             INSERT INTO lost_found_posts 
-            (user_id, category_id, type, title, description, name_on_card, card_student_id, card_department, location, date_lost_found, image_path, status, expires_at, collection_location)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, DATE_ADD(NOW(), INTERVAL 30 DAY), ?)
+            (user_id, category_id, type, title, description, name_on_card, card_student_id, card_department, location, date_lost_found, image_path, status, expires_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, DATE_ADD(NOW(), INTERVAL 30 DAY))
         `;
 
         const [result] = await db.execute(sql, [
@@ -38,8 +37,7 @@ class LostFoundPost {
             location,
             date_lost_found,
             image_path || null,
-            initialStatus,
-            collection_location || null
+            initialStatus
         ]);
 
         return result.insertId;
@@ -121,8 +119,7 @@ class LostFoundPost {
             card_department,
             location,
             date_lost_found,
-            image_path, // Optional, only if updated
-            collection_location
+            image_path // Optional, only if updated
         } = postData;
 
         let sql = `
@@ -134,8 +131,7 @@ class LostFoundPost {
                 card_student_id = ?,
                 card_department = ?,
                 location = ?,
-                date_lost_found = ?,
-                collection_location = ?
+                date_lost_found = ?
         `;
         const params = [
             category_id,
@@ -145,8 +141,7 @@ class LostFoundPost {
             card_student_id || null,
             card_department || null,
             location,
-            date_lost_found,
-            collection_location || null
+            date_lost_found
         ];
 
         if (image_path) {

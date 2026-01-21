@@ -1,14 +1,16 @@
 import { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from '../api/axios';
 import AuthContext from '../context/AuthContext';
 
 const CreateMarketplaceListing = () => {
     const { user } = useContext(AuthContext);
+    const { id } = useParams();
     const navigate = useNavigate();
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const isEditing = !!id;
 
     const [formData, setFormData] = useState({
         title: '',
@@ -22,7 +24,8 @@ const CreateMarketplaceListing = () => {
     });
 
     const [images, setImages] = useState([]);
-    const [imagePreviews, setImagePreviews] = useState([]);
+    const [existingImages, setExistingImages] = useState([]); // URLs of images already on server
+    const [imagePreviews, setImagePreviews] = useState([]); // Previews for NEW images
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -37,6 +40,47 @@ const CreateMarketplaceListing = () => {
         fetchCategories();
     }, []);
 
+    useEffect(() => {
+        if (isEditing) {
+            const fetchListing = async () => {
+                try {
+                    setLoading(true);
+                    const res = await axios.get(`/marketplace/${id}`);
+                    const listing = res.data;
+
+                    if (listing.user_id !== user.id) {
+                        setError("You are not authorized to edit this listing.");
+                        return;
+                    }
+
+                    setFormData({
+                        title: listing.title,
+                        category_id: listing.category_id,
+                        listing_type: listing.listing_type,
+                        price: listing.price || '',
+                        is_negotiable: !!listing.is_negotiable,
+                        exchange_for: listing.exchange_for || '',
+                        condition_status: listing.condition_status,
+                        description: listing.description
+                    });
+
+                    // Handle existing images
+                    if (listing.images && listing.images.length > 0) {
+                        // Map absolute paths
+                        const fullPaths = listing.images.map(img => `http://localhost:5000${img}`);
+                        setExistingImages(fullPaths);
+                    }
+                } catch (err) {
+                    console.error("Error fetching listing:", err);
+                    setError("Failed to load listing details.");
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchListing();
+        }
+    }, [id, user.id, isEditing]);
+
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData(prev => ({
@@ -46,9 +90,12 @@ const CreateMarketplaceListing = () => {
     };
 
     const handleImageChange = (e) => {
+        // if (isEditing) return; // Enabled now
         const files = Array.from(e.target.files);
-        if (files.length + images.length > 5) {
-            alert('You can only upload up to 5 images');
+
+        const totalImages = existingImages.length + images.length + files.length;
+        if (totalImages > 5) {
+            alert(`You can only have up to 5 images. You currently have ${existingImages.length + images.length}.`);
             return;
         }
 
@@ -58,9 +105,13 @@ const CreateMarketplaceListing = () => {
         setImagePreviews(prev => [...prev, ...newPreviews]);
     };
 
-    const removeImage = (index) => {
+    const removeNewImage = (index) => {
         setImages(prev => prev.filter((_, i) => i !== index));
         setImagePreviews(prev => prev.filter((_, i) => i !== index));
+    };
+
+    const removeExistingImage = (index) => {
+        setExistingImages(prev => prev.filter((_, i) => i !== index));
     };
 
     const handleSubmit = async (e) => {
@@ -74,20 +125,34 @@ const CreateMarketplaceListing = () => {
                 data.append(key, formData[key]);
             });
 
+            // Append new images
             images.forEach(image => {
                 data.append('images', image);
             });
 
-            await axios.post('/marketplace', data, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
+            if (isEditing) {
+                // Append existing images to keep
+                existingImages.forEach(img => {
+                    data.append('keep_images', img);
+                });
 
-            navigate('/marketplace');
+                await axios.put(`/marketplace/${id}`, data, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                navigate('/marketplace/my-listings');
+            } else {
+                await axios.post('/marketplace', data, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                navigate('/marketplace');
+            }
         } catch (err) {
             console.error(err);
-            setError(err.response?.data?.message || 'Failed to create listing');
+            setError(err.response?.data?.message || `Failed to ${isEditing ? 'update' : 'create'} listing`);
         } finally {
             setLoading(false);
         }
@@ -213,7 +278,7 @@ const CreateMarketplaceListing = () => {
     return (
         <div style={{ backgroundColor: '#f9fafb', minHeight: '100vh', padding: '1px 0' }}>
             <div style={styles.container}>
-                <h1 style={styles.header}>Create New Listing</h1>
+                <h1 style={styles.header}>{isEditing ? 'Edit Listing' : 'Create New Listing'}</h1>
 
                 {error && <div style={styles.error}>{error}</div>}
 
@@ -345,15 +410,31 @@ const CreateMarketplaceListing = () => {
                             multiple
                             onChange={handleImageChange}
                             style={styles.input}
+                            disabled={existingImages.length + images.length >= 5}
                         />
 
                         <div style={styles.imagePreviewContainer}>
+                            {/* Existing Images */}
+                            {existingImages.map((src, index) => (
+                                <div key={`existing-${index}`} style={styles.imagePreview}>
+                                    <img src={src} alt="Existing" style={styles.image} />
+                                    <button
+                                        type="button"
+                                        onClick={() => removeExistingImage(index)}
+                                        style={styles.removeBtn}
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                            ))}
+
+                            {/* New Images */}
                             {imagePreviews.map((src, index) => (
-                                <div key={index} style={styles.imagePreview}>
+                                <div key={`new-${index}`} style={styles.imagePreview}>
                                     <img src={src} alt="Preview" style={styles.image} />
                                     <button
                                         type="button"
-                                        onClick={() => removeImage(index)}
+                                        onClick={() => removeNewImage(index)}
                                         style={styles.removeBtn}
                                     >
                                         ×
@@ -361,6 +442,9 @@ const CreateMarketplaceListing = () => {
                                 </div>
                             ))}
                         </div>
+                        <p style={{ fontSize: '0.85rem', color: '#6b7280', marginTop: '0.5rem' }}>
+                            {existingImages.length + images.length}/5 images used
+                        </p>
                     </div>
 
                     <button
@@ -368,7 +452,7 @@ const CreateMarketplaceListing = () => {
                         disabled={loading}
                         style={styles.submitBtn}
                     >
-                        {loading ? 'Creating Listing...' : 'Create Listing'}
+                        {loading ? 'Saving...' : (isEditing ? 'Update Listing' : 'Create Listing')}
                     </button>
                 </form>
             </div>

@@ -14,8 +14,7 @@ const createPost = async (req, res) => {
             card_student_id,
             card_department,
             location,
-            date_lost_found,
-            collection_location
+            date_lost_found
         } = req.body;
 
         // Basic validation
@@ -42,8 +41,7 @@ const createPost = async (req, res) => {
             date_lost_found,
             image_path,
             status: type, // 'lost' or 'found'
-            expires_at,
-            collection_location
+            expires_at
         });
 
         res.status(201).json({ message: 'Post created successfully', postId: newPostId });
@@ -206,8 +204,7 @@ const updatePost = async (req, res) => {
             card_student_id,
             card_department,
             location,
-            date_lost_found,
-            collection_location
+            date_lost_found
         } = req.body;
 
         const post = await LostFoundPost.getById(req.params.id);
@@ -232,8 +229,7 @@ const updatePost = async (req, res) => {
             card_department,
             location,
             date_lost_found,
-            image_path,
-            collection_location
+            image_path
         });
 
         res.json({ message: 'Post updated successfully' });

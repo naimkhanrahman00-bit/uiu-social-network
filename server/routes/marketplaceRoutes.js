@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const marketplaceController = require('../controllers/marketplaceController');
-const { protect } = require('../middleware/authMiddleware');
+const { protect, admin } = require('../middleware/authMiddleware');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -39,10 +39,30 @@ const upload = multer({
 // Get all listings
 router.get('/', marketplaceController.getListings);
 
-// Create a new listing
-router.post('/', protect, upload.array('images', 5), marketplaceController.createListing);
+// Get current user's listings
+router.get('/my-listings', protect, marketplaceController.getMyListings);
 
 // Get all categories
 router.get('/categories', marketplaceController.getCategories);
+
+// Admin Category Management
+router.post('/categories', protect, admin, marketplaceController.createCategory);
+router.put('/categories/:id', protect, admin, marketplaceController.updateCategory);
+router.delete('/categories/:id', protect, admin, marketplaceController.deleteCategory);
+
+// Create a new listing
+router.post('/', protect, upload.array('images', 5), marketplaceController.createListing);
+
+// Get single listing details
+router.get('/:id', marketplaceController.getListingById);
+
+// Update listing (full update)
+router.put('/:id', protect, upload.array('images', 5), marketplaceController.updateListing);
+
+// Update listing status
+router.patch('/:id/status', protect, marketplaceController.updateListingStatus);
+
+// Delete listing
+router.delete('/:id', protect, marketplaceController.deleteListing);
 
 module.exports = router;

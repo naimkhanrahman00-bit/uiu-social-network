@@ -3,6 +3,10 @@ import api from '../api/axios';
 
 const AuthContext = createContext();
 
+export const useAuth = () => {
+    return React.useContext(AuthContext);
+};
+
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(localStorage.getItem('token'));

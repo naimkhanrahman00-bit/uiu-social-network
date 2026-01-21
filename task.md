@@ -34,7 +34,7 @@
         - [x] Story 2.5: Claim/Update Status
         - [x] Story 2.6: My Posts
         - [x] Story 2.7: Expiration System
-    - [/] Epic 3: Marketplace <!-- id: 24 -->
+    - [x] Epic 3: Marketplace <!-- id: 24 -->
         - [x] Story 3.1: Create Marketplace Listing
             - [x] Task 3.1.1: Create marketplace tables & seed categories
             - [x] Task 3.1.2: Create post listing API
@@ -43,6 +43,18 @@
             - [x] Task 3.2.1: Backend - Get All Listings API (Search, Filter, Sort, Pagination)
             - [x] Task 3.2.2: Frontend - Marketplace Feed Page (Layout, Sidebar/Header Filters)
             - [x] Task 3.2.3: Frontend - Listing Card Component
+        - [x] Story 3.3: Listing Details Page
+            - [x] Task 3.3.1: Backend - Get Single Listing API
+            - [x] Task 3.3.2: Frontend - Listing Details Page UI (Carousel, Info, Seller)
+            - [x] Task 3.3.3: Frontend - Seller Stats & Other Listings
+        - [x] Story 3.4: Manage My Listings
+            - [x] Task 3.4.1: Backend - My Listings API & CRUD
+            - [x] Task 3.4.2: Frontend - My Listings Page
+            - [x] Task 3.4.3: Frontend - Edit Listing Page
+            - [x] Task 3.4.4: Frontend - Mark as Sold/Delete
+        - [x] Story 3.5: Marketplace Categories (Admin)
+            - [x] Task 3.5.1: Backend - Category Management API
+            - [x] Task 3.5.2: Frontend - Category Management UI
     - [ ] Epic 4: ResourceHub <!-- id: 25 -->
     - [ ] Epic 5: Section Issue <!-- id: 26 -->
     - [ ] Epic 6: Feedback & Reviews <!-- id: 27 -->
