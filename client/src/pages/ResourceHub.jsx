@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import ResourceCard from '../components/ResourceCard';
+import ResourceRequestForm from '../components/ResourceRequestForm';
 
 const ResourceHub = () => {
     const { user } = useAuth();
     const [breadcrumbs, setBreadcrumbs] = useState([{ name: 'Departments', type: 'root' }]);
-    const [currentView, setCurrentView] = useState('departments'); // departments, courses, resources
+    const [currentView, setCurrentView] = useState('departments'); // departments, courses, resources, my-requests
+    const [showRequestModal, setShowRequestModal] = useState(false);
 
     const [departments, setDepartments] = useState([]);
     const [courses, setCourses] = useState([]);
     const [resources, setResources] = useState([]);
+    const [myRequests, setMyRequests] = useState([]);
     const [loading, setLoading] = useState(true);
 
     // Selection state
@@ -21,13 +24,15 @@ const ResourceHub = () => {
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
-        fetchDepartments();
-    }, []);
+        if (currentView === 'departments') {
+            fetchDepartments();
+        }
+    }, [currentView]);
 
     const fetchDepartments = async () => {
         setLoading(true);
         try {
-            const res = await axios.get('http://localhost:5000/api/resources/departments');
+            const res = await api.get('/resources/departments');
             setDepartments(res.data);
             setCurrentView('departments');
         } catch (err) {
@@ -40,7 +45,7 @@ const ResourceHub = () => {
     const fetchCourses = async (deptId) => {
         setLoading(true);
         try {
-            const res = await axios.get(`http://localhost:5000/api/resources/courses?department_id=${deptId}`);
+            const res = await api.get(`/resources/courses?department_id=${deptId}`);
             setCourses(res.data);
             setCurrentView('courses');
         } catch (err) {
@@ -53,18 +58,31 @@ const ResourceHub = () => {
     const fetchResources = async (courseId = null) => {
         setLoading(true);
         try {
-            let url = 'http://localhost:5000/api/resources';
+            let url = '/resources';
             const params = new URLSearchParams();
 
             if (courseId) params.append('course_id', courseId);
             if (searchTerm) params.append('search', searchTerm);
-            // If we are at root finding all resources, validation needed on server or UI logic?
-            // For now, if courseId is present, we filter by it. 
-            // If users search globally, we might want to clear course selection.
 
-            const res = await axios.get(`${url}?${params.toString()}`);
+            const res = await api.get(`${url}?${params.toString()}`);
             setResources(res.data);
             setCurrentView('resources');
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchMyRequests = async () => {
+        setLoading(true);
+        try {
+            const res = await api.get('/resources/requests/my-requests');
+            setMyRequests(res.data);
+            setCurrentView('my-requests');
+            setBreadcrumbs([{ name: 'My Requests', type: 'my-requests' }]);
+            setSelectedDept(null);
+            setSelectedCourse(null);
         } catch (err) {
             console.error(err);
         } finally {
@@ -124,27 +142,76 @@ const ResourceHub = () => {
         setBreadcrumbs([{ name: 'Departments', type: 'root' }]);
         setSelectedDept(null);
         setSelectedCourse(null);
+        setCurrentView('departments');
         fetchDepartments();
         setSearchTerm('');
     };
 
-    const handleDownload = (resource) => {
-        // Implement download logic (Story 4.2)
-        alert(`Downloading ${resource.title}... (Implementation coming in 4.2)`);
+    const handleDownload = async (resource) => {
+        try {
+            const response = await api.get(`/resources/${resource.id}/download`, {
+                responseType: 'blob',
+            });
+
+            // Create blob link to download
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+
+            // Extract extension from file_path
+            const extension = resource.file_path ? resource.file_path.split('.').pop() : 'pdf';
+            link.setAttribute('download', `${resource.title}.${extension}`);
+
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+
+            // Update download count locally
+            setResources(prev => prev.map(r =>
+                r.id === resource.id ? { ...r, download_count: r.download_count + 1 } : r
+            ));
+
+        } catch (error) {
+            console.error("Download failed", error);
+            // If 401, redirect to login? Or just alert.
+            if (error.response && error.response.status === 401) {
+                alert("Please log in to download resources.");
+            } else {
+                alert("Failed to download resource. Please try again.");
+            }
+        }
     };
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-3xl font-bold text-gray-900">Resource Hub</h1>
-                <div className="w-full max-w-xs">
-                    <input
-                        type="text"
-                        placeholder="Search resources..."
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+                <div className="flex gap-4">
+                    <div className="w-64">
+                        <input
+                            type="text"
+                            placeholder="Search resources..."
+                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+                    {user && (
+                        <>
+                            <button
+                                onClick={fetchMyRequests}
+                                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                            >
+                                My Requests
+                            </button>
+                            <button
+                                onClick={() => setShowRequestModal(true)}
+                                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+                            >
+                                Request Resource
+                            </button>
+                        </>
+                    )}
                 </div>
             </div>
 
@@ -234,7 +301,14 @@ const ResourceHub = () => {
                                     </svg>
                                     <p className="text-gray-500 text-lg">No resources found.</p>
                                     {user && (
-                                        <p className="text-gray-400 text-sm mt-2">Could be the first to upload!</p>
+                                        <div className="mt-4">
+                                            <button
+                                                onClick={() => setShowRequestModal(true)}
+                                                className="text-blue-600 hover:text-blue-800 font-medium"
+                                            >
+                                                Request this resource
+                                            </button>
+                                        </div>
                                     )}
                                 </div>
                             ) : (
@@ -250,7 +324,67 @@ const ResourceHub = () => {
                             )}
                         </div>
                     )}
+
+                    {/* My Requests View */}
+                    {currentView === 'my-requests' && (
+                        <div className="overflow-hidden bg-white shadow sm:rounded-md">
+                            <ul role="list" className="divide-y divide-gray-200">
+                                {myRequests.length === 0 ? (
+                                    <div className="text-center py-12">
+                                        <p className="text-gray-500">You haven't made any requests yet.</p>
+                                    </div>
+                                ) : (
+                                    myRequests.map((request) => (
+                                        <li key={request.id}>
+                                            <div className="px-4 py-4 sm:px-6">
+                                                <div className="flex items-center justify-between">
+                                                    <p className="truncate text-sm font-medium text-blue-600">{request.resource_name}</p>
+                                                    <div className="ml-2 flex flex-shrink-0">
+                                                        <p className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 
+                                                            ${request.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                                                request.status === 'approved' ? 'bg-green-100 text-green-800' :
+                                                                    request.status === 'uploaded' ? 'bg-blue-100 text-blue-800' :
+                                                                        'bg-red-100 text-red-800'}`}>
+                                                            {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="mt-2 sm:flex sm:justify-between">
+                                                    <div className="sm:flex">
+                                                        <p className="flex items-center text-sm text-gray-500">
+                                                            {request.course_code} - {request.course_name}
+                                                        </p>
+                                                    </div>
+                                                    <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                                                        <p>
+                                                            Requested on {new Date(request.created_at).toLocaleDateString()}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                {request.description && (
+                                                    <div className="mt-2 text-sm text-gray-500 italic">
+                                                        "{request.description}"
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </li>
+                                    ))
+                                )}
+                            </ul>
+                        </div>
+                    )}
                 </>
+            )}
+
+            {showRequestModal && (
+                <ResourceRequestForm
+                    onClose={() => setShowRequestModal(false)}
+                    onSuccess={() => {
+                        // Optionally refresh requests if in that view, or just show success alert
+                        alert("Request submitted successfully!");
+                        if (currentView === 'my-requests') fetchMyRequests();
+                    }}
+                />
             )}
         </div>
     );

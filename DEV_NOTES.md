@@ -82,3 +82,14 @@
   - Browser verification failed due to environment issues, but backend APIs verified via curl.
   - Basic seed data included.
 - **Next Steps**: Implement Story 4.2 (Download Resource) and 4.4 (Admin Upload).
+
+### 2026-01-21 - Antigravity
+- **Accomplished**:
+  - Implemented **Story 4.2 (Download Resource)**:
+    - Backend: Added `downloadResource` controller and `/api/resources/:id/download` route.
+    - Frontend: Implemented download functionality in `ResourceHub` with auth support.
+    - Verification: Created dummy PDFs in `uploads/resources/` for testing.
+- **Notes**:
+  - `ResourceHub.jsx` now uses `api` instance instead of raw `axios`.
+  - Dummy files `sample1.pdf` and `sample2.pdf` are physically present in `server/uploads/resources`.
+- **Next Steps**: Implement Story 4.4 (Admin - Upload Resource) to allow real file uploads.

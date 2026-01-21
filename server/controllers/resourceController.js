@@ -1,4 +1,6 @@
 const db = require('../config/db');
+const path = require('path');
+const fs = require('fs');
 
 // Get all resources with filters
 exports.getAllResources = async (req, res) => {
@@ -116,5 +118,111 @@ exports.getFilterOptions = async (req, res) => {
     } catch (error) {
         console.error('Error fetching filter options:', error);
         res.status(500).json({ message: 'Server error fetching filter options' });
+    }
+};
+
+// Download resource
+exports.downloadResource = async (req, res) => {
+    try {
+        const resourceId = req.params.id;
+        const userId = req.user ? req.user.id : null; // From protect middleware
+
+        // 1. Get resource details
+        const [resources] = await db.query('SELECT * FROM resources WHERE id = ?', [resourceId]);
+
+        if (resources.length === 0) {
+            return res.status(404).json({ message: 'Resource not found' });
+        }
+
+        const resource = resources[0];
+
+        // 2. Increment download count
+        await db.query('UPDATE resources SET download_count = download_count + 1 WHERE id = ?', [resourceId]);
+
+        // 3. Track download if user is logged in
+        if (userId) {
+            await db.query('INSERT INTO resource_downloads (resource_id, user_id) VALUES (?, ?)', [resourceId, userId]);
+        }
+
+        // 4. Serve file
+        // Assuming file_path is stored relative to root/uploads, e.g., 'uploads/resources/file.pdf'
+        // or just 'resources/file.pdf' if we prepend uploads.
+        // Let's assume the DB stores the path relative to server root or 'uploads/'
+        // We need to resolve it correctly. 
+        // Based on typical multer usage it might be 'uploads/filename' or 'uploads/resources/filename'.
+
+        let filePath = resource.file_path;
+        // Remove leading slash or backslash if present to ensure it's treated as relative
+        if (filePath.startsWith('/') || filePath.startsWith('\\')) {
+            filePath = filePath.substring(1);
+        }
+
+        // Construct absolute path
+        // process.cwd() is e:\db\server
+        const absolutePath = path.join(process.cwd(), filePath);
+
+        if (fs.existsSync(absolutePath)) {
+            res.download(absolutePath, resource.title + path.extname(filePath), (err) => {
+                if (err) {
+                    console.error('Error downloading file:', err);
+                    if (!res.headersSent) {
+                        res.status(500).json({ message: 'Error downloading file' });
+                    }
+                }
+            });
+        } else {
+            console.error('File not found at path:', absolutePath);
+            return res.status(404).json({ message: 'File not found on server' });
+        }
+
+    } catch (error) {
+        console.error('Error in downloadResource:', error);
+        res.status(500).json({ message: 'Server error processing download' });
+    }
+};
+
+// Create a resource request
+exports.createRequest = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { course_id, resource_name, description } = req.body;
+
+        if (!course_id || !resource_name) {
+            return res.status(400).json({ message: 'Course and Resource Name are required' });
+        }
+
+        await db.query(
+            'INSERT INTO resource_requests (user_id, course_id, resource_name, description) VALUES (?, ?, ?, ?)',
+            [userId, course_id, resource_name, description]
+        );
+
+        res.status(201).json({ message: 'Request submitted successfully' });
+    } catch (error) {
+        console.error('Error creating resource request:', error);
+        res.status(500).json({ message: 'Server error creating request' });
+    }
+};
+
+// Get my requests
+exports.getMyRequests = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const query = `
+            SELECT 
+                rr.*,
+                c.code as course_code,
+                c.name as course_name
+            FROM resource_requests rr
+            JOIN courses c ON rr.course_id = c.id
+            WHERE rr.user_id = ?
+            ORDER BY rr.created_at DESC
+        `;
+
+        const [rows] = await db.query(query, [userId]);
+        res.json(rows);
+    } catch (error) {
+        console.error('Error fetching my requests:', error);
+        res.status(500).json({ message: 'Server error fetching requests' });
     }
 };

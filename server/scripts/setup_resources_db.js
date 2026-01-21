@@ -56,7 +56,21 @@ async function setupResourcesDB() {
         FOREIGN KEY (uploaded_by) REFERENCES users(id)
       )
     `);
+
         console.log('resources table checked/created.');
+
+        // 4. Create resource_downloads table
+        await connection.execute(`
+      CREATE TABLE IF NOT EXISTS resource_downloads (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        resource_id INT NOT NULL,
+        user_id INT NOT NULL,
+        downloaded_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (resource_id) REFERENCES resources(id) ON DELETE CASCADE,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+      )
+    `);
+        console.log('resource_downloads table checked/created.');
 
         // Seed Departments
         const departments = [

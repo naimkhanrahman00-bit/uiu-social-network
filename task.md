@@ -63,6 +63,17 @@
             - [x] Task 4.1.4: Create get resources API with filters
             - [x] Task 4.1.5: Build resource browser UI
             - [x] Task 4.1.6: Add search functionality
+        - [x] Story 4.2: Download Resource
+            - [x] Task 4.2.1: Create download API
+            - [x] Task 4.2.2: Create resource_downloads tracking table
+            - [x] Task 4.2.3: Implement download tracking
+            - [x] Task 4.2.4: Add download button to resource list
+        - [x] Story 4.3: Request Resource
+            - [x] Task 4.3.1: Create resource_requests table
+            - [x] Task 4.3.2: Create submit request API
+            - [x] Task 4.3.3: Create my requests API
+            - [x] Task 4.3.4: Build request form UI
+            - [x] Task 4.3.5: Build my requests page UI
     - [ ] Epic 5: Section Issue <!-- id: 26 -->
     - [ ] Epic 6: Feedback & Reviews <!-- id: 27 -->
     - [ ] Epic 7: Messaging <!-- id: 28 -->
