@@ -20,6 +20,9 @@ import Marketplace from './pages/Marketplace';
 import MarketplaceDetails from './pages/MarketplaceDetails';
 import MyMarketplaceListings from './pages/MyMarketplaceListings';
 import ManageMarketplaceCategories from './pages/admin/ManageMarketplaceCategories';
+import AdminResourceUpload from './pages/admin/AdminResourceUpload';
+import ManageResourceRequests from './pages/admin/ManageResourceRequests';
+import ManageCourses from './pages/admin/ManageCourses';
 
 console.log("App.jsx module loaded");
 
@@ -142,6 +145,30 @@ function App() {
             element={
               <ProtectedRoute>
                 <ResourceHub />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/resources/upload"
+            element={
+              <ProtectedRoute>
+                <AdminResourceUpload />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/resources/requests"
+            element={
+              <ProtectedRoute>
+                <ManageResourceRequests />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/courses"
+            element={
+              <ProtectedRoute>
+                <ManageCourses />
               </ProtectedRoute>
             }
           />

@@ -226,3 +226,160 @@ exports.getMyRequests = async (req, res) => {
         res.status(500).json({ message: 'Server error fetching requests' });
     }
 };
+
+// Upload resource
+exports.uploadResource = async (req, res) => {
+    try {
+        const uploaderId = req.user.id;
+        const { course_id, title, description } = req.body;
+        const file = req.file;
+
+        if (!file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+
+        if (!course_id || !title) {
+            return res.status(400).json({ message: 'Course and Title are required' });
+        }
+
+        // Prepare file path relative to project root or accessible URL path
+        // Middleware saves to ./uploads/resources/
+        // We want to store just 'uploads/resources/filename' or similar
+        // Let's store 'uploads/resources/filename' so it matches our download logic
+        const filePath = `uploads/resources/${file.filename}`;
+
+        await db.query(
+            'INSERT INTO resources (course_id, title, description, file_path, file_size, uploaded_by) VALUES (?, ?, ?, ?, ?, ?)',
+            [course_id, title, description, filePath, file.size, uploaderId]
+        );
+
+        res.status(201).json({ message: 'Resource uploaded successfully' });
+
+    } catch (error) {
+        console.error('Error uploading resource:', error);
+        res.status(500).json({ message: 'Server error uploading resource' });
+    }
+};
+
+// Get all requests (Admin only)
+exports.getAllRequests = async (req, res) => {
+    try {
+        const { status } = req.query;
+        let query = `
+            SELECT 
+                rr.*,
+                u.full_name as user_name,
+                u.student_id,
+                c.code as course_code,
+                c.name as course_name
+            FROM resource_requests rr
+            JOIN users u ON rr.user_id = u.id
+            JOIN courses c ON rr.course_id = c.id
+        `;
+
+        const params = [];
+        if (status) {
+            query += ' WHERE rr.status = ?';
+            params.push(status);
+        }
+
+        query += ' ORDER BY rr.created_at DESC';
+
+        const [rows] = await db.query(query, params);
+        res.json(rows);
+    } catch (error) {
+        console.error('Error fetching all requests:', error);
+        res.status(500).json({ message: 'Server error fetching requests' });
+    }
+};
+
+// Update request status (Admin only)
+exports.updateRequestStatus = async (req, res) => {
+    try {
+        const requestId = req.params.id;
+        const { status, admin_note, fulfilled_resource_id } = req.body;
+
+        if (!status) {
+            return res.status(400).json({ message: 'Status is required' });
+        }
+
+        await db.query(
+            'UPDATE resource_requests SET status = ?, admin_note = ?, fulfilled_resource_id = ? WHERE id = ?',
+            [status, admin_note || null, fulfilled_resource_id || null, requestId]
+        );
+
+        res.json({ message: 'Request updated successfully' });
+    } catch (error) {
+        console.error('Error updating request:', error);
+        res.status(500).json({ message: 'Server error updating request' });
+    }
+};
+
+// Create Course (Admin only)
+exports.createCourse = async (req, res) => {
+    try {
+        const { code, name, department_id, trimester } = req.body;
+
+        if (!code || !name || !department_id || !trimester) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
+
+        const [existing] = await db.query('SELECT id FROM courses WHERE code = ?', [code]);
+        if (existing.length > 0) {
+            return res.status(400).json({ message: 'Course with this code already exists' });
+        }
+
+        await db.query(
+            'INSERT INTO courses (code, name, department_id, trimester) VALUES (?, ?, ?, ?)',
+            [code, name, department_id, trimester]
+        );
+
+        res.status(201).json({ message: 'Course created successfully' });
+    } catch (error) {
+        console.error('Error creating course:', error);
+        res.status(500).json({ message: 'Server error creating course' });
+    }
+};
+
+// Update Course (Admin only)
+exports.updateCourse = async (req, res) => {
+    try {
+        const courseId = req.params.id;
+        const { code, name, department_id, trimester } = req.body;
+
+        await db.query(
+            'UPDATE courses SET code = ?, name = ?, department_id = ?, trimester = ? WHERE id = ?',
+            [code, name, department_id, trimester, courseId]
+        );
+
+        res.json({ message: 'Course updated successfully' });
+    } catch (error) {
+        console.error('Error updating course:', error);
+        res.status(500).json({ message: 'Server error updating course' });
+    }
+};
+
+// Delete Course (Admin only)
+exports.deleteCourse = async (req, res) => {
+    try {
+        const courseId = req.params.id;
+
+        // Check dependencies
+        const [resources] = await db.query('SELECT id FROM resources WHERE course_id = ?', [courseId]);
+        if (resources.length > 0) {
+            return res.status(400).json({ message: 'Cannot delete course with existing resources' });
+        }
+
+        const [requests] = await db.query('SELECT id FROM resource_requests WHERE course_id = ?', [courseId]);
+        if (requests.length > 0) {
+            return res.status(400).json({ message: 'Cannot delete course with existing requests' });
+        }
+
+        await db.query('DELETE FROM courses WHERE id = ?', [courseId]);
+
+        res.json({ message: 'Course deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting course:', error);
+        res.status(500).json({ message: 'Server error deleting course' });
+    }
+};

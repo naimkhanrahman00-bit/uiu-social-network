@@ -74,6 +74,19 @@
             - [x] Task 4.3.3: Create my requests API
             - [x] Task 4.3.4: Build request form UI
             - [x] Task 4.3.5: Build my requests page UI
+        - [x] Story 4.4: Admin - Upload Resource
+            - [x] Task 4.4.1: Create upload resource API (`POST /api/resources`) - admin only
+            - [x] Task 4.4.2: Configure Multer for PDF uploads
+            - [x] Task 4.4.3: Build upload form in admin panel
+            - [x] Task 4.4.4: Add progress indicator for large filesUI
+        - [x] Story 4.5: Admin - Manage Requests
+            - [x] Task 4.5.1: Create get all requests API (admin)
+            - [x] Task 4.5.2: Create update request status API
+            - [x] Task 4.5.3: Build admin request management UI
+        - [x] Story 4.6: Admin - Manage Courses
+            - [x] Task 4.6.1: Create course CRUD APIs (admin only)
+            - [x] Task 4.6.2: Build course management UI in admin panel
+            - [x] Task 4.6.3: Seed initial department and course data
     - [ ] Epic 5: Section Issue <!-- id: 26 -->
     - [ ] Epic 6: Feedback & Reviews <!-- id: 27 -->
     - [ ] Epic 7: Messaging <!-- id: 28 -->

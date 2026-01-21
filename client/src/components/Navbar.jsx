@@ -38,9 +38,20 @@ const Navbar = () => {
                                 Sell Item
                             </Link>
                             {user.role === 'admin' && (
-                                <Link to="/admin/marketplace-categories" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
-                                    Admin Setup
-                                </Link>
+                                <>
+                                    <Link to="/admin/marketplace-categories" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
+                                        Manage Categories
+                                    </Link>
+                                    <Link to="/admin/resources/upload" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
+                                        Upload Resource
+                                    </Link>
+                                    <Link to="/admin/resources/requests" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
+                                        Manage Requests
+                                    </Link>
+                                    <Link to="/admin/courses" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
+                                        Manage Courses
+                                    </Link>
+                                </>
                             )}
                             <Link to="/profile" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
                                 Hello, {user.full_name}
