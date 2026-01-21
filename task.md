@@ -55,7 +55,14 @@
         - [x] Story 3.5: Marketplace Categories (Admin)
             - [x] Task 3.5.1: Backend - Category Management API
             - [x] Task 3.5.2: Frontend - Category Management UI
-    - [ ] Epic 4: ResourceHub <!-- id: 25 -->
+    - [/] Epic 4: ResourceHub <!-- id: 25 -->
+        - [x] Story 4.1: Browse Resources
+            - [x] Task 4.1.1: Create departments table
+            - [x] Task 4.1.2: Create courses table
+            - [x] Task 4.1.3: Create resources table
+            - [x] Task 4.1.4: Create get resources API with filters
+            - [x] Task 4.1.5: Build resource browser UI
+            - [x] Task 4.1.6: Add search functionality
     - [ ] Epic 5: Section Issue <!-- id: 26 -->
     - [ ] Epic 6: Feedback & Reviews <!-- id: 27 -->
     - [ ] Epic 7: Messaging <!-- id: 28 -->

@@ -30,6 +30,16 @@
 
 ## 📝 Session Log
 
+### 2026-01-21 - Antigravity (Story 4.1)
+- **Accomplished**:
+  - Implemented **Story 4.1 (Browse Resources)**:
+    - Database: Created `departments`, `courses`, `resources` tables and seeded initial data.
+    - Backend: Created `resourceController` and `resourceRoutes`.
+    - Frontend: Created `ResourceHub` page with filters (Dept, Course, Trimester) and search.
+- **Notes**:
+  - Download button is a placeholder (Story 4.2).
+
+
 ### 2026-01-19 - Antigravity
 - **Accomplished**: 
   - Implemented **Story 2.4 (Item Details)**: Added delete functionality for owners.
@@ -60,3 +70,15 @@
   - **Notes**:
     - `App.jsx` updated to use `Marketplace` component instead of `MarketplaceFeed` placeholder.
     - Added comprehensive browser verification for marketplace flow.
+
+### 2026-01-21 - Antigravity
+- **Accomplished**:
+  - Implemented **Story 4.1 (Browse Resources)**:
+    - Created database tables: `departments`, `courses`, `resources` (via `setup_resources_db.js`).
+    - Seeded initial departments (CSE, EEE, BBA) and courses.
+    - Created Backend: `resourceController.js` and `resourceRoutes.js` with endpoints for departments, courses, and resources.
+    - Created Frontend: `ResourceHub.jsx` for navigating Dept -> Course -> Resource, and `ResourceCard.jsx` for display.
+- **Notes**:
+  - Browser verification failed due to environment issues, but backend APIs verified via curl.
+  - Basic seed data included.
+- **Next Steps**: Implement Story 4.2 (Download Resource) and 4.4 (Admin Upload).

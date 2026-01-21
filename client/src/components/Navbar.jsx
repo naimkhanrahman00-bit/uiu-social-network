@@ -31,6 +31,9 @@ const Navbar = () => {
                             <Link to="/marketplace" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
                                 Marketplace
                             </Link>
+                            <Link to="/resources" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
+                                Resources
+                            </Link>
                             <Link to="/marketplace/create" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
                                 Sell Item
                             </Link>

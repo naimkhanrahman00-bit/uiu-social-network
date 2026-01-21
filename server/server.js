@@ -31,6 +31,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/lost-found', lostFoundRoutes);
 app.use('/api/marketplace', marketplaceRoutes);
+app.use('/api/resources', require('./routes/resourceRoutes'));
 
 // Make uploads folder static
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));

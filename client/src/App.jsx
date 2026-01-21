@@ -1,4 +1,6 @@
+import ResourceHub from './pages/ResourceHub';
 import React from 'react';
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Register from './pages/Register';
@@ -130,6 +132,16 @@ function App() {
             element={
               <ProtectedRoute>
                 <ManageMarketplaceCategories />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* ResourceHub Routes */}
+          <Route
+            path="/resources"
+            element={
+              <ProtectedRoute>
+                <ResourceHub />
               </ProtectedRoute>
             }
           />
