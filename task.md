@@ -163,6 +163,16 @@
             - [x] Task 9.1.1: Create dashboard stats API (`GET /api/admin/dashboard`)
             - [x] Task 9.1.2: Build admin dashboard UI
             - [x] Task 9.1.3: Add stat cards and quick links
+        - [x] Story 9.2: User Management
+            - [x] Task 9.2.1: Create get users API
+            - [x] Task 9.2.2: Create update user role API
+            - [x] Task 9.2.3: Create suspend user API
+            - [x] Task 9.2.4: Build user management UI
+            - [x] Task 9.2.5: Fixed mysql2 LIMIT/OFFSET prepared statement issue
+        - [x] Story 9.3: Content Moderation
+            - [x] Task 9.3.1: Create get all content API (`GET /api/admin/content`)
+            - [x] Task 9.3.2: Create delete content API (`DELETE /api/admin/content/:type/:id`)
+            - [x] Task 9.3.3: Build content moderation UI
 
 - [ ] **Phase 5: Final Polish** <!-- id: 31 -->
     - [ ] Testing & Bug Fixes <!-- id: 32 -->

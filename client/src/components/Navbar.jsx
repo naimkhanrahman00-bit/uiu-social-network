@@ -64,6 +64,9 @@ const Navbar = () => {
                                     <Link to="/admin/users" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
                                         Manage Users
                                     </Link>
+                                    <Link to="/admin/content" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
+                                        Content Moderation
+                                    </Link>
                                     <Link to="/admin/marketplace-categories" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
                                         Manage Categories
                                     </Link>

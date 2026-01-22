@@ -29,4 +29,14 @@ router.patch('/users/:id/suspend', protect, admin, adminController.suspendUser);
 // @access  Private/Admin
 router.get('/users/:id/activity', protect, admin, adminController.getUserActivity);
 
+// @route   GET /api/admin/content
+// @desc    Get all content across modules with filtering
+// @access  Private/Admin
+router.get('/content', protect, admin, adminController.getAllContent);
+
+// @route   DELETE /api/admin/content/:type/:id
+// @desc    Delete content by type and ID
+// @access  Private/Admin
+router.delete('/content/:type/:id', protect, admin, adminController.deleteContent);
+
 module.exports = router;

@@ -46,51 +46,58 @@ class User {
 
     // Get all users with search, filter, and pagination
     static async getAll({ search = '', role = '', status = '', limit = 20, offset = 0 }) {
-        let sql = `
-            SELECT u.id, u.email, u.student_id, u.full_name, u.role, u.is_suspended, u.is_verified, 
-                   u.batch, u.contact_info, u.created_at, d.name as department_name
-            FROM users u
-            LEFT JOIN departments d ON u.department_id = d.id
-            WHERE 1=1
-        `;
+        // Build the base SQL and params
+        let baseSql = 'SELECT u.id, u.email, u.student_id, u.full_name, u.role, u.is_suspended, u.is_verified, u.batch, u.contact_info, u.created_at, d.name as department_name FROM users u LEFT JOIN departments d ON u.department_id = d.id WHERE 1=1';
+        let countBaseSql = 'SELECT COUNT(*) as total FROM users u LEFT JOIN departments d ON u.department_id = d.id WHERE 1=1';
         const params = [];
 
-        // Search filter
+        // Add filters
         if (search) {
-            sql += ` AND (u.full_name LIKE ? OR u.email LIKE ? OR u.student_id LIKE ?)`;
+            const filter = ' AND (u.full_name LIKE ? OR u.email LIKE ? OR u.student_id LIKE ?)';
+            baseSql += filter;
+            countBaseSql += filter;
             const searchParam = `%${search}%`;
             params.push(searchParam, searchParam, searchParam);
         }
 
-        // Role filter
         if (role) {
-            sql += ` AND u.role = ?`;
+            const filter = ' AND u.role = ?';
+            baseSql += filter;
+            countBaseSql += filter;
             params.push(role);
         }
 
-        // Status filter (active/suspended)
         if (status === 'active') {
-            sql += ` AND u.is_suspended = 0`;
+            const filter = ' AND u.is_suspended = 0';
+            baseSql += filter;
+            countBaseSql += filter;
         } else if (status === 'suspended') {
-            sql += ` AND u.is_suspended = 1`;
+            const filter = ' AND u.is_suspended = 1';
+            baseSql += filter;
+            countBaseSql += filter;
         }
 
-        // Get total count before pagination
-        const countSql = `SELECT COUNT(*) as total FROM (${sql}) as filtered_users`;
-        const [countResult] = await db.execute(countSql, params);
+        // Get count (execute works fine for count with no LIMIT/OFFSET)
+        const [countResult] = await db.execute(countBaseSql, params);
         const total = countResult[0].total;
 
-        // Add pagination
-        sql += ` ORDER BY u.created_at DESC LIMIT ? OFFSET ?`;
-        params.push(parseInt(limit), parseInt(offset));
+        // Get data with pagination
+        // Note: mysql2's execute() doesn't support parameterized LIMIT/OFFSET
+        // We use query() with escaped values instead
+        const limitNum = parseInt(limit);
+        const offsetNum = parseInt(offset);
+        baseSql += ` ORDER BY u.created_at DESC LIMIT ${limitNum} OFFSET ${offsetNum}`;
 
-        const [rows] = await db.execute(sql, params);
+        // Use query() with params for filters only
+        const [rows] = params.length > 0
+            ? await db.query(baseSql, params)
+            : await db.query(baseSql);
 
         return {
             users: rows,
             total,
-            limit: parseInt(limit),
-            offset: parseInt(offset)
+            limit: limitNum,
+            offset: offsetNum
         };
     }
 

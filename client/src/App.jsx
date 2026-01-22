@@ -37,7 +37,8 @@ import FeedbackDashboard from './pages/Feedback/FeedbackDashboard';
 import FeedbackModeration from './pages/Feedback/FeedbackModeration';
 import Messages from './pages/Messages/Messages';
 import AdminDashboard from './pages/admin/AdminDashboard';
-import UserManagement from './pages/admin/UserManagement';
+import Users from './pages/Admin/Users';
+import ContentModeration from './pages/Admin/ContentModeration';
 
 console.log("App.jsx module loaded");
 
@@ -204,7 +205,17 @@ function App() {
               path="/admin/users"
               element={
                 <ProtectedRoute>
-                  <UserManagement />
+                  <Users />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Admin Content Moderation Route */}
+            <Route
+              path="/admin/content"
+              element={
+                <ProtectedRoute>
+                  <ContentModeration />
                 </ProtectedRoute>
               }
             />

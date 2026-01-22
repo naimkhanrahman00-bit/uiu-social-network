@@ -288,10 +288,267 @@ const getUserActivity = async (req, res) => {
     }
 };
 
+/**
+ * @desc    Get all content across modules with filtering and search
+ * @route   GET /api/admin/content
+ * @access  Private/Admin
+ */
+const getAllContent = async (req, res) => {
+    try {
+        const {
+            type = 'all',
+            status = 'all',
+            search = '',
+            sortBy = 'newest',
+            limit = 20,
+            offset = 0
+        } = req.query;
+
+        const contentTypes = [];
+
+        // Build queries based on content type filter
+        if (type === 'all' || type === 'lost_found') {
+            const lfQuery = `
+                SELECT 
+                    lf.id,
+                    'lost_found' as content_type,
+                    lf.title,
+                    lf.description as content,
+                    u.full_name as author_name,
+                    u.id as author_id,
+                    lf.status,
+                    lf.type as subtype,
+                    lf.created_at
+                FROM lost_found_posts lf
+                JOIN users u ON lf.user_id = u.id
+                WHERE (? = 'all' OR lf.status = ?)
+                ${search ? "AND (lf.title LIKE ? OR lf.description LIKE ?)" : ""}
+            `;
+            const params = [status, status];
+            if (search) {
+                params.push(`%${search}%`, `%${search}%`);
+            }
+            const [lfResults] = await db.execute(lfQuery, params);
+            contentTypes.push(...lfResults);
+        }
+
+        if (type === 'all' || type === 'marketplace') {
+            const mpQuery = `
+                SELECT 
+                    m.id,
+                    'marketplace' as content_type,
+                    m.title,
+                    m.description as content,
+                    u.full_name as author_name,
+                    u.id as author_id,
+                    m.status,
+                    m.listing_type as subtype,
+                    m.created_at
+                FROM marketplace_listings m
+                JOIN users u ON m.user_id = u.id
+                WHERE (? = 'all' OR m.status = ?)
+                ${search ? "AND (m.title LIKE ? OR m.description LIKE ?)" : ""}
+            `;
+            const params = [status, status];
+            if (search) {
+                params.push(`%${search}%`, `%${search}%`);
+            }
+            const [mpResults] = await db.execute(mpQuery, params);
+            contentTypes.push(...mpResults);
+        }
+
+        if (type === 'all' || type === 'feedback') {
+            const fbQuery = `
+                SELECT 
+                    f.id,
+                    'feedback' as content_type,
+                    f.title,
+                    f.content,
+                    CASE WHEN f.is_anonymous = 1 THEN 'Anonymous' ELSE u.full_name END as author_name,
+                    u.id as author_id,
+                    f.status,
+                    f.feedback_type as subtype,
+                    f.created_at
+                FROM feedback_posts f
+                JOIN users u ON f.user_id = u.id
+                WHERE (? = 'all' OR f.status = ?)
+                ${search ? "AND (f.title LIKE ? OR f.content LIKE ?)" : ""}
+            `;
+            const params = [status, status];
+            if (search) {
+                params.push(`%${search}%`, `%${search}%`);
+            }
+            const [fbResults] = await db.execute(fbQuery, params);
+            contentTypes.push(...fbResults);
+        }
+
+        if (type === 'all' || type === 'section_exchange') {
+            const seQuery = `
+                SELECT 
+                    se.id,
+                    'section_exchange' as content_type,
+                    CONCAT('Section Exchange: ', c.code, ' (', se.current_section, ' → ', se.desired_section, ')') as title,
+                    se.note as content,
+                    u.full_name as author_name,
+                    u.id as author_id,
+                    se.status,
+                    'exchange' as subtype,
+                    se.created_at
+                FROM section_exchange_posts se
+                JOIN users u ON se.user_id = u.id
+                JOIN courses c ON se.course_id = c.id
+                WHERE (? = 'all' OR se.status = ?)
+                ${search ? "AND (c.code LIKE ? OR se.note LIKE ?)" : ""}
+            `;
+            const params = [status, status];
+            if (search) {
+                params.push(`%${search}%`, `%${search}%`);
+            }
+            const [seResults] = await db.execute(seQuery, params);
+            contentTypes.push(...seResults);
+        }
+
+        if (type === 'all' || type === 'section_request') {
+            const srQuery = `
+                SELECT 
+                    sr.id,
+                    'section_request' as content_type,
+                    CONCAT('New Section Request: ', c.code, ' - ', sr.desired_section) as title,
+                    sr.reason as content,
+                    u.full_name as author_name,
+                    u.id as author_id,
+                    sr.status,
+                    'new_section' as subtype,
+                    sr.created_at
+                FROM section_requests sr
+                JOIN users u ON sr.user_id = u.id
+                JOIN courses c ON sr.course_id = c.id
+                WHERE (? = 'all' OR sr.status = ?)
+                ${search ? "AND (c.code LIKE ? OR sr.reason LIKE ?)" : ""}
+            `;
+            const params = [status, status];
+            if (search) {
+                params.push(`%${search}%`, `%${search}%`);
+            }
+            const [srResults] = await db.execute(srQuery, params);
+            contentTypes.push(...srResults);
+        }
+
+        // Sort all content by date
+        contentTypes.sort((a, b) => {
+            if (sortBy === 'newest') {
+                return new Date(b.created_at) - new Date(a.created_at);
+            } else {
+                return new Date(a.created_at) - new Date(b.created_at);
+            }
+        });
+
+        // Apply pagination
+        const total = contentTypes.length;
+        const limitNum = parseInt(limit);
+        const offsetNum = parseInt(offset);
+        const paginatedContent = contentTypes.slice(offsetNum, offsetNum + limitNum);
+
+        res.json({
+            success: true,
+            data: {
+                content: paginatedContent,
+                total,
+                limit: limitNum,
+                offset: offsetNum
+            }
+        });
+
+    } catch (error) {
+        console.error('Error fetching content:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching content',
+            error: error.message
+        });
+    }
+};
+
+/**
+ * @desc    Delete content by type and ID
+ * @route   DELETE /api/admin/content/:type/:id
+ * @access  Private/Admin
+ */
+const deleteContent = async (req, res) => {
+    try {
+        const { type, id } = req.params;
+        const adminId = req.user.id;
+
+        // Validate content type
+        const validTypes = ['lost_found', 'marketplace', 'feedback', 'section_exchange', 'section_request'];
+        if (!validTypes.includes(type)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid content type'
+            });
+        }
+
+        let query;
+        let deletionType;
+
+        // Perform soft delete for marketplace and lost_found
+        if (type === 'marketplace') {
+            query = "UPDATE marketplace_listings SET status = 'deleted' WHERE id = ?";
+            deletionType = 'soft';
+        } else if (type === 'lost_found') {
+            query = "UPDATE lost_found_posts SET status = 'deleted' WHERE id = ?";
+            deletionType = 'soft';
+        }
+        // Perform hard delete for feedback and section posts
+        else if (type === 'feedback') {
+            query = "DELETE FROM feedback_posts WHERE id = ?";
+            deletionType = 'hard';
+        } else if (type === 'section_exchange') {
+            query = "DELETE FROM section_exchange_posts WHERE id = ?";
+            deletionType = 'hard';
+        } else if (type === 'section_request') {
+            query = "DELETE FROM section_requests WHERE id = ?";
+            deletionType = 'hard';
+        }
+
+        const [result] = await db.execute(query, [id]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Content not found'
+            });
+        }
+
+        // Log deletion action
+        console.log(`[AUDIT] Admin ${adminId} ${deletionType}-deleted ${type} content #${id} at ${new Date().toISOString()}`);
+
+        res.json({
+            success: true,
+            message: `Content deleted successfully (${deletionType} delete)`,
+            data: {
+                type,
+                id,
+                deletionType
+            }
+        });
+
+    } catch (error) {
+        console.error('Error deleting content:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error deleting content',
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
     getDashboardStats,
     getUsers,
     updateUserRole,
     suspendUser,
-    getUserActivity
+    getUserActivity,
+    getAllContent,
+    deleteContent
 };
