@@ -77,6 +77,7 @@ class Message {
             connection.release();
         }
     }
+
     static async getConversations(userId) {
         const sql = `
             SELECT 
@@ -95,6 +96,29 @@ class Message {
 
         const [rows] = await db.execute(sql, [userId, userId, userId, userId]);
         return rows;
+    }
+
+    static async getMessages(conversationId) {
+        const sql = `
+            SELECT m.*, u.full_name as sender_name 
+            FROM messages m 
+            JOIN users u ON m.sender_id = u.id 
+            WHERE conversation_id = ? 
+            ORDER BY created_at ASC
+        `;
+        const [rows] = await db.execute(sql, [conversationId]);
+        return rows;
+    }
+
+    static async markAsRead(conversationId, userId) {
+        // Mark messages as read where I am the recipient (meaning sender != me)
+        // We know the conversation involves me, so if sender != me, it's addressed to me.
+        const sql = `
+            UPDATE messages 
+            SET is_read = 1 
+            WHERE conversation_id = ? AND sender_id != ? AND is_read = 0
+        `;
+        await db.execute(sql, [conversationId, userId]);
     }
 }
 

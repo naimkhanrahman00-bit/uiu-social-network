@@ -138,6 +138,12 @@
             - [x] Task 7.2.1: Create get conversations API (`GET /api/messages/conversations`)
             - [x] Task 7.2.2: Build conversations list UI
             - [x] Task 7.2.3: Show unread badges
+        - [x] Story 7.3: Send/Receive Messages
+            - [x] Task 7.3.1: Create send message API (`POST /api/messages/:conversationId`)
+            - [x] Task 7.3.2: Create get messages API (`GET /api/messages/:conversationId`)
+            - [x] Task 7.3.3: Create mark as read API (`PATCH /api/messages/:conversationId/read`)
+            - [x] Task 7.3.4: Build conversation view UI
+            - [x] Task 7.3.5: Implement message polling (or WebSocket later)
     - [ ] Epic 8: Notifications <!-- id: 29 -->
     - [ ] Epic 9: Admin Panel <!-- id: 30 -->
 
