@@ -32,6 +32,8 @@ app.use('/api/users', userRoutes);
 app.use('/api/lost-found', lostFoundRoutes);
 app.use('/api/marketplace', marketplaceRoutes);
 app.use('/api/resources', require('./routes/resourceRoutes'));
+app.use('/api/settings', require('./routes/systemSettingsRoutes'));
+app.use('/api/section-issue', require('./routes/sectionExchangeRoutes'));
 
 // Make uploads folder static
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));

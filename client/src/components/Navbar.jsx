@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import { useSettings } from '../context/SettingsContext';
 
 const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
+    const { settings } = useSettings();
     const navigate = useNavigate();
 
     const onLogout = () => {
@@ -37,6 +39,11 @@ const Navbar = () => {
                             <Link to="/marketplace/create" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
                                 Sell Item
                             </Link>
+                            {settings?.section_issue_enabled === 'true' && (
+                                <Link to="/section-issue" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
+                                    Section Exchange
+                                </Link>
+                            )}
                             {user.role === 'admin' && (
                                 <>
                                     <Link to="/admin/marketplace-categories" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
@@ -50,6 +57,9 @@ const Navbar = () => {
                                     </Link>
                                     <Link to="/admin/courses" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
                                         Manage Courses
+                                    </Link>
+                                    <Link to="/admin/settings" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
+                                        Settings
                                     </Link>
                                 </>
                             )}

@@ -87,7 +87,25 @@
             - [x] Task 4.6.1: Create course CRUD APIs (admin only)
             - [x] Task 4.6.2: Build course management UI in admin panel
             - [x] Task 4.6.3: Seed initial department and course data
-    - [ ] Epic 5: Section Issue <!-- id: 26 -->
+    - [/] Epic 5: Section Issue <!-- id: 26 -->
+        - [/] Story 5.1: Admin - Toggle Section Issue Feature
+            - [/] Task 5.1.1: Create system_settings table
+            - [x] Task 5.1.2: Create toggle API (`PATCH /api/admin/settings/section-issue`)
+            - [x] Task 5.1.3: Create get settings API (`GET /api/settings`)
+            - [x] Task 5.1.4: Add toggle switch in admin panel
+            - [x] Task 5.1.5: Implement conditional navigation rendering
+    - [x] Story 5.2: Post Section Exchange Request <!-- id: 40 -->
+        - [x] Task 5.2.1: Create section_exchange_posts table
+        - [x] Task 5.2.2: Create post exchange API (`POST /api/section-issue/exchange`)
+        - [x] Task 5.2.3: Build exchange post form UI
+        - [x] Task 5.2.4: Implement course dropdown from predefined list
+        - [x] Story 5.3: Browse Section Exchange Posts
+            - [x] Task 5.3.1: Create get exchange posts API (`GET /api/section-issue/exchange`)
+            - [x] Task 5.3.2: Build exchange posts feed UI
+            - [x] Task 5.3.3: Add filter by course
+        - [ ] Story 5.4: Post New Section Request
+        - [ ] Story 5.5: Support New Section Request
+        - [ ] Story 5.6: Moderator - Approve Section Posts
     - [ ] Epic 6: Feedback & Reviews <!-- id: 27 -->
     - [ ] Epic 7: Messaging <!-- id: 28 -->
     - [ ] Epic 8: Notifications <!-- id: 29 -->
