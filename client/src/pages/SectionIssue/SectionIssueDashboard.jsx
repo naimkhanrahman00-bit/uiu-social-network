@@ -42,6 +42,12 @@ const SectionIssueDashboard = () => {
                         >
                             Request Section
                         </Link>
+                        <Link
+                            to="/section-issue/requests"
+                            className="flex-1 text-center border border-green-600 text-green-600 py-2 rounded hover:bg-green-50 transition"
+                        >
+                            Browse Requests
+                        </Link>
                     </div>
                 </div>
             </div>

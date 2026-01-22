@@ -29,6 +29,8 @@ import SectionIssueDashboard from './pages/SectionIssue/SectionIssueDashboard';
 import PostExchangeRequest from './pages/SectionIssue/PostExchangeRequest';
 import SectionExchangeFeed from './pages/SectionIssue/SectionExchangeFeed';
 import PostNewSectionRequest from './pages/SectionIssue/PostNewSectionRequest';
+import SectionRequestsFeed from './pages/SectionIssue/SectionRequestsFeed';
+import ModerationDashboard from './pages/SectionIssue/ModerationDashboard';
 
 console.log("App.jsx module loaded");
 
@@ -220,6 +222,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <PostNewSectionRequest />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/section-issue/requests"
+              element={
+                <ProtectedRoute>
+                  <SectionRequestsFeed />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/section-issue/moderation"
+              element={
+                <ProtectedRoute>
+                  <ModerationDashboard />
                 </ProtectedRoute>
               }
             />
