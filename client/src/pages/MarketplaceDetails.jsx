@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import AuthContext from '../context/AuthContext';
+import StartConversationButton from '../components/Message/StartConversationButton';
 
 const MarketplaceDetails = () => {
     const { id } = useParams();
@@ -298,13 +299,12 @@ const MarketplaceDetails = () => {
                                     </Link>
                                 </div>
                             ) : (
-                                <a
-                                    href={`mailto:${listing.seller_email}?subject=Inquiry about ${listing.title} on UIU Social Network`}
-                                    className="btn btn-primary btn-block"
-                                    style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}
-                                >
-                                    Contact Seller
-                                </a>
+                                <div style={{ width: '100%' }}>
+                                    <StartConversationButton
+                                        recipientId={listing.user_id}
+                                        context={`Hi, I'm interested in your listing: "${listing.title}"`}
+                                    />
+                                </div>
                             )}
                         </div>
                     </div>

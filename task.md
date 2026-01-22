@@ -128,7 +128,16 @@
             - [x] Task 6.5.1: Create admin_responses table
             - [x] Task 6.5.2: Create respond API (`POST /api/feedback/:id/respond`) - admin only
             - [x] Task 6.5.3: Display admin response in feedback detail view
-    - [ ] Epic 7: Messaging <!-- id: 28 -->
+    - [/] Epic 7: Messaging <!-- id: 28 -->
+        - [x] Story 7.1: Start Conversation
+            - [x] Task 7.1.1: Create conversations table
+            - [x] Task 7.1.2: Create messages table
+            - [x] Task 7.1.3: Create start conversation API (`POST /api/messages/conversations`)
+            - [x] Task 7.1.4: Add "Message" button to relevant pages
+        - [x] Story 7.2: View Conversations
+            - [x] Task 7.2.1: Create get conversations API (`GET /api/messages/conversations`)
+            - [x] Task 7.2.2: Build conversations list UI
+            - [x] Task 7.2.3: Show unread badges
     - [ ] Epic 8: Notifications <!-- id: 29 -->
     - [ ] Epic 9: Admin Panel <!-- id: 30 -->
 

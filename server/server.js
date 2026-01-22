@@ -36,6 +36,7 @@ app.use('/api/resources', require('./routes/resourceRoutes'));
 app.use('/api/settings', require('./routes/systemSettingsRoutes'));
 app.use('/api/section-issue', require('./routes/sectionExchangeRoutes'));
 app.use('/api/feedback', feedbackRoutes);
+app.use('/api/messages', require('./routes/messageRoutes'));
 
 // Make uploads folder static
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));

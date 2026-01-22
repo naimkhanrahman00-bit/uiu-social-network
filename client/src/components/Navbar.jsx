@@ -47,6 +47,9 @@ const Navbar = () => {
                             <Link to="/feedback" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
                                 Feedback
                             </Link>
+                            <Link to="/messages" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
+                                Messages
+                            </Link>
                             {(user.role === 'admin' || user.role === 'moderator') && (
                                 <Link to="/feedback/moderation" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
                                     Moderation

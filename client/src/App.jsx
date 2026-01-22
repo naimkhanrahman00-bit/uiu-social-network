@@ -35,6 +35,7 @@ import PostGeneralIssue from './pages/PostGeneralIssue';
 import PostCanteenFeedback from './pages/PostCanteenFeedback';
 import FeedbackDashboard from './pages/Feedback/FeedbackDashboard';
 import FeedbackModeration from './pages/Feedback/FeedbackModeration';
+import Messages from './pages/Messages/Messages';
 
 console.log("App.jsx module loaded");
 
@@ -276,6 +277,16 @@ function App() {
               element={
                 <ProtectedRoute>
                   <FeedbackModeration />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Messages Routes */}
+            <Route
+              path="/messages"
+              element={
+                <ProtectedRoute>
+                  <Messages />
                 </ProtectedRoute>
               }
             />

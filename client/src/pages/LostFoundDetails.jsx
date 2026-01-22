@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import AuthContext from '../context/AuthContext';
+import StartConversationButton from '../components/Message/StartConversationButton';
 
 const LostFoundDetails = () => {
     const { id } = useParams();
@@ -165,9 +166,15 @@ const LostFoundDetails = () => {
 
                     <div style={{ marginTop: '1.5rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                         {!isOwner && (
-                            <a href={`mailto:${post.email}?subject=Regarding your ${post.type} item: ${post.title}`} className="btn btn-primary">
-                                Contact via Email
-                            </a>
+                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                <a href={`mailto:${post.email}?subject=Regarding your ${post.type} item: ${post.title}`} className="btn btn-primary">
+                                    Contact via Email
+                                </a>
+                                <StartConversationButton
+                                    recipientId={post.user_id}
+                                    context={`Hi, regarding your ${post.type} item: "${post.title}"`}
+                                />
+                            </div>
                         )}
                         {isOwner && (
                             <>
