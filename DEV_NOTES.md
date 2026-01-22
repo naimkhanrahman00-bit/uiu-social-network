@@ -30,6 +30,23 @@
 
 ## 📝 Session Log
 
+### 2026-01-22 - Antigravity (Story 6.1)
+- **Accomplished**:
+  - Implemented **Story 6.1 (Post General Issue)**:
+    - Database: Verified `feedback_posts` table exists with correct schema.
+    - Backend: Created `Feedback` model, `feedbackController`, and `feedbackRoutes`.
+    - Frontend: Created `PostGeneralIssue.jsx` component with form and styling.
+    - Added route `/feedback/general` and "Feedback" link to Navbar.
+- **Issues Fixed**:
+  - Import path error: `../utils/api` → `../api/axios`
+  - Middleware error: `authenticateToken` → `protect`
+  - Database query error: `db.promise().query()` → `db.execute()`
+- **Notes**:
+  - Feedback submissions work end-to-end with `status='pending'` for moderator approval.
+  - Anonymous posting option implemented.
+  - After submission, redirects to `/feedback` (not yet implemented - Story 6.3).
+- **Next Steps**: Implement Story 6.2 (Canteen/Food Feedback with images).
+
 ### 2026-01-21 - Antigravity (Story 4.1)
 - **Accomplished**:
   - Implemented **Story 4.1 (Browse Resources)**:
