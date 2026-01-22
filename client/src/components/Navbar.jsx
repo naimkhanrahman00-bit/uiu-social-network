@@ -44,11 +44,11 @@ const Navbar = () => {
                                     Section Exchange
                                 </Link>
                             )}
-                            <Link to="/feedback/general" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
+                            <Link to="/feedback" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
                                 Feedback
                             </Link>
                             {(user.role === 'admin' || user.role === 'moderator') && (
-                                <Link to="/section-issue/moderation" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
+                                <Link to="/feedback/moderation" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
                                     Moderation
                                 </Link>
                             )}

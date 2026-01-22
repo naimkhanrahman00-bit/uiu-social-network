@@ -1,4 +1,5 @@
 const SectionExchangePost = require('../models/SectionExchangePost');
+const SectionRequest = require('../models/SectionRequest');
 
 exports.createExchangeRequest = async (req, res) => {
     try {
@@ -24,12 +25,11 @@ exports.createExchangeRequest = async (req, res) => {
     }
 };
 
-const SectionRequest = require('../models/SectionRequest');
-
 exports.getExchangeRequests = async (req, res) => {
     try {
         const { courseId, search } = req.query;
-        const posts = await SectionExchangePost.getAll({ course_id: courseId, search });
+        // Default to showing only approved posts for normal feed
+        const posts = await SectionExchangePost.getAll({ course_id: courseId, search, status: 'approved' });
         res.json(posts);
     } catch (error) {
         console.error('Error fetching exchange requests:', error);
@@ -57,5 +57,70 @@ exports.createNewSectionRequest = async (req, res) => {
     } catch (error) {
         console.error('Error posting new section request:', error);
         res.status(500).json({ message: 'Server error posting new section request' });
+    }
+};
+
+exports.getSectionRequests = async (req, res) => {
+    try {
+        const { courseId, search } = req.query;
+        const userId = req.user.id;
+        const requests = await SectionRequest.getAll({ course_id: courseId, search, user_id: userId, status: 'approved' });
+        res.json(requests);
+    } catch (error) {
+        console.error('Error fetching section requests:', error);
+        res.status(500).json({ message: 'Server error fetching section requests' });
+    }
+};
+
+exports.toggleSupport = async (req, res) => {
+    try {
+        const requestId = req.params.id;
+        const userId = req.user.id;
+
+        const action = await SectionRequest.toggleSupport(requestId, userId);
+        res.json({ message: `Support ${action} successfully`, action });
+    } catch (error) {
+        console.error('Error toggling support:', error);
+        res.status(500).json({ message: 'Server error toggling support' });
+    }
+};
+
+exports.getPendingPosts = async (req, res) => {
+    try {
+        const exchangePosts = await SectionExchangePost.getAll({ status: 'pending' });
+        const sectionRequests = await SectionRequest.getAll({ status: 'pending', user_id: req.user.id });
+
+        res.json({
+            exchangePosts,
+            sectionRequests
+        });
+    } catch (error) {
+        console.error('Error fetching pending posts:', error);
+        res.status(500).json({ message: 'Server error fetching pending posts' });
+    }
+};
+
+exports.updatePostStatus = async (req, res) => {
+    try {
+        const { type, id } = req.params;
+        const { status } = req.body; // 'approved' or 'rejected'
+        const approved_by = req.user.id;
+
+        if (!['approved', 'rejected'].includes(status)) {
+            return res.status(400).json({ message: 'Invalid status' });
+        }
+
+        if (type === 'exchange') {
+            await SectionExchangePost.updateStatus(id, status, approved_by);
+        } else if (type === 'new-section') {
+            await SectionRequest.updateStatus(id, status, approved_by);
+        } else {
+            return res.status(400).json({ message: 'Invalid type' });
+        }
+
+        res.json({ message: `Post ${status} successfully` });
+    } catch (error) {
+        console.error('Error updating post status:', error);
+        res.status(500).json({ message: 'Server error updating post status' });
     }
 };

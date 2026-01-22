@@ -110,3 +110,13 @@
   - `ResourceHub.jsx` now uses `api` instance instead of raw `axios`.
   - Dummy files `sample1.pdf` and `sample2.pdf` are physically present in `server/uploads/resources`.
 - **Next Steps**: Implement Story 4.4 (Admin - Upload Resource) to allow real file uploads.
+
+### 2026-01-22 - Antigravity (Story 6.5)
+- **Accomplished**:
+  - Implemented **Story 6.5 (Admin - Respond to Feedback)**:
+    - Database: Created `admin_responses` table.
+    - Backend: Added `respondToFeedback` endpoint and updated `Feedback.getAll` to include admin responses.
+    - Frontend: Updated `FeedbackCard` to display admin responses and allow admins to submit responses.
+- **Notes**:
+  - Verification script `create_admin_responses_table.js` was run to ensure table creation with `IF NOT EXISTS`.
+  - Manual verification available in walkthrough.
