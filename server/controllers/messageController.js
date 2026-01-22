@@ -1,4 +1,5 @@
 const Message = require('../models/Message');
+const Notification = require('../models/Notification');
 
 exports.startConversation = async (req, res) => {
     try {
@@ -63,6 +64,26 @@ exports.sendMessage = async (req, res) => {
         }
 
         const messageId = await Message.addMessage(conversationId, senderId, content);
+
+        // Notify Recipient
+        try {
+            const conversation = await Message.getConversationById(conversationId);
+            if (conversation) {
+                const recipientId = (conversation.user1_id === senderId) ? conversation.user2_id : conversation.user1_id;
+
+                await Notification.create({
+                    userId: recipientId,
+                    type: 'message_received',
+                    title: 'New Message',
+                    message: `You received a message from ${req.user.full_name}`,
+                    link: `/messages` // Or /messages/${conversationId} if frontend supports it
+                });
+            }
+        } catch (notifError) {
+            console.error('Error creating notification:', notifError);
+            // Don't fail the request if notification fails
+        }
+
         res.status(201).json({ message: 'Message sent', messageId });
     } catch (error) {
         console.error('Error sending message:', error);

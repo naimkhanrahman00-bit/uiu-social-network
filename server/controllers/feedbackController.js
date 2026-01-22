@@ -1,5 +1,6 @@
 const Feedback = require('../models/Feedback');
 const db = require('../config/db');
+const Notification = require('../models/Notification');
 
 exports.createGeneralFeedback = async (req, res) => {
     try {
@@ -140,6 +141,28 @@ exports.updateFeedbackStatus = async (req, res) => {
             [status, id]
         );
 
+        // Notify User
+        try {
+            const [rows] = await db.execute('SELECT user_id, title FROM feedback_posts WHERE id = ?', [id]);
+            if (rows.length > 0) {
+                const feedback = rows[0];
+                const notifType = status === 'approved' ? 'post_approved' : 'post_rejected';
+                const message = status === 'approved'
+                    ? `Your feedback "${feedback.title}" has been approved.`
+                    : `Your feedback "${feedback.title}" has been rejected.`;
+
+                await Notification.create({
+                    userId: feedback.user_id,
+                    type: notifType,
+                    title: `Feedback ${status.charAt(0).toUpperCase() + status.slice(1)}`,
+                    message: message,
+                    link: '/feedback'
+                });
+            }
+        } catch (notifError) {
+            console.error('Error creating notification:', notifError);
+        }
+
         res.json({ message: `Feedback ${status} successfully` });
     } catch (error) {
         console.error('Error updating feedback status:', error);
@@ -166,6 +189,23 @@ exports.respondToFeedback = async (req, res) => {
             'INSERT INTO admin_responses (feedback_id, admin_id, response) VALUES (?, ?, ?)',
             [id, admin_id, response]
         );
+
+        // Notify User
+        try {
+            const [rows] = await db.execute('SELECT user_id, title FROM feedback_posts WHERE id = ?', [id]);
+            if (rows.length > 0) {
+                const feedback = rows[0];
+                await Notification.create({
+                    userId: feedback.user_id,
+                    type: 'feedback_response',
+                    title: 'Admin Replied',
+                    message: `Admin responded to your feedback: "${feedback.title}"`,
+                    link: '/feedback'
+                });
+            }
+        } catch (notifError) {
+            console.error('Error creating notification:', notifError);
+        }
 
         res.status(201).json({ message: 'Response posted successfully' });
     } catch (error) {

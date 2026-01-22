@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import { useSettings } from '../context/SettingsContext';
+import NotificationDropdown from './NotificationDropdown';
 
 const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
@@ -77,6 +78,7 @@ const Navbar = () => {
                             <Link to="/profile" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
                                 Hello, {user.full_name}
                             </Link>
+                            <NotificationDropdown />
                             <button onClick={onLogout} className="btn" style={{ background: '#ef4444', color: 'white' }}>Logout</button>
                         </>
                     ) : (

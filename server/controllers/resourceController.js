@@ -1,6 +1,7 @@
 const db = require('../config/db');
 const path = require('path');
 const fs = require('fs');
+const Notification = require('../models/Notification');
 
 // Get all resources with filters
 exports.getAllResources = async (req, res) => {
@@ -303,10 +304,28 @@ exports.updateRequestStatus = async (req, res) => {
             return res.status(400).json({ message: 'Status is required' });
         }
 
+        const [requests] = await db.query('SELECT user_id, resource_name FROM resource_requests WHERE id = ?', [requestId]);
+
         await db.query(
             'UPDATE resource_requests SET status = ?, admin_note = ?, fulfilled_resource_id = ? WHERE id = ?',
             [status, admin_note || null, fulfilled_resource_id || null, requestId]
         );
+
+        // Notify User
+        try {
+            if (requests.length > 0) {
+                const request = requests[0];
+                await Notification.create({
+                    userId: request.user_id,
+                    type: 'request_update',
+                    title: 'Resource Request Updated',
+                    message: `Your request for "${request.resource_name}" has been ${status}.`,
+                    link: '/resources/my-requests'
+                });
+            }
+        } catch (notifError) {
+            console.error('Error creating notification:', notifError);
+        }
 
         res.json({ message: 'Request updated successfully' });
     } catch (error) {

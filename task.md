@@ -144,7 +144,20 @@
             - [x] Task 7.3.3: Create mark as read API (`PATCH /api/messages/:conversationId/read`)
             - [x] Task 7.3.4: Build conversation view UI
             - [x] Task 7.3.5: Implement message polling (or WebSocket later)
-    - [ ] Epic 8: Notifications <!-- id: 29 -->
+    - [/] Epic 8: Notifications <!-- id: 29 -->
+        - [x] Story 8.1: Receive Notifications
+            - [x] Task 8.1.1: Verify/Create notifications table
+            - [x] Task 8.1.2: Create notification service/helper
+            - [x] Task 8.1.3: Integrate notifications into relevant features
+        - [x] Story 8.2: View Notifications
+            - [x] Task 8.2.1: Create get notifications API (`GET /api/notifications`)
+            - [x] Task 8.2.2: Build notification dropdown UI
+            - [x] Task 8.2.3: Build notifications page UI
+            - [x] Task 8.2.4: Implement unread count badge
+        - [x] Story 8.3: Mark Notifications as Read
+            - [x] Task 8.3.1: Create mark read API (`PATCH /api/notifications/:id/read`)
+            - [x] Task 8.3.2: Create mark all read API (`PATCH /api/notifications/read-all`)
+            - [x] Task 8.3.3: Update UI to show read/unread states
     - [ ] Epic 9: Admin Panel <!-- id: 30 -->
 
 - [ ] **Phase 5: Final Polish** <!-- id: 31 -->

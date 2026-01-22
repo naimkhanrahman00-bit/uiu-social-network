@@ -111,6 +111,20 @@
   - Dummy files `sample1.pdf` and `sample2.pdf` are physically present in `server/uploads/resources`.
 - **Next Steps**: Implement Story 4.4 (Admin - Upload Resource) to allow real file uploads.
 
+### 2026-01-22 - Antigravity (Story 8.1)
+- **Accomplished**:
+  - Implemented **Story 8.1 (Receive Notifications)**:
+    - Verified `notifications` table existence.
+    - Created `Notification` model with `create`, `getByUser`, `markAsRead` methods.
+    - Integrated notifications into:
+      - **Messages**: Notify recipient on new message.
+      - **Feedback**: Notify user on approval/rejection and admin response.
+      - **Resource Requests**: Notify user on status update.
+- **Notes**:
+  - Notification generation is now active in the backend.
+  - Frontend display (Story 8.2) is next.
+  - Verified Model functionality with script.
+
 ### 2026-01-22 - Antigravity (Story 6.5)
 - **Accomplished**:
   - Implemented **Story 6.5 (Admin - Respond to Feedback)**:
