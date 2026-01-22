@@ -120,6 +120,11 @@ class Message {
         `;
         await db.execute(sql, [conversationId, userId]);
     }
+
+    static async getConversationById(id) {
+        const [rows] = await db.execute('SELECT * FROM conversations WHERE id = ?', [id]);
+        return rows[0];
+    }
 }
 
 module.exports = Message;

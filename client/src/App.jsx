@@ -36,6 +36,8 @@ import PostCanteenFeedback from './pages/PostCanteenFeedback';
 import FeedbackDashboard from './pages/Feedback/FeedbackDashboard';
 import FeedbackModeration from './pages/Feedback/FeedbackModeration';
 import Messages from './pages/Messages/Messages';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import UserManagement from './pages/admin/UserManagement';
 
 console.log("App.jsx module loaded");
 
@@ -183,6 +185,26 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ManageCourses />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Admin Dashboard Route */}
+            <Route
+              path="/admin/dashboard"
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Admin User Management Route */}
+            <Route
+              path="/admin/users"
+              element={
+                <ProtectedRoute>
+                  <UserManagement />
                 </ProtectedRoute>
               }
             />

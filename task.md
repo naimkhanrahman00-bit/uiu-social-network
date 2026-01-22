@@ -158,7 +158,11 @@
             - [x] Task 8.3.1: Create mark read API (`PATCH /api/notifications/:id/read`)
             - [x] Task 8.3.2: Create mark all read API (`PATCH /api/notifications/read-all`)
             - [x] Task 8.3.3: Update UI to show read/unread states
-    - [ ] Epic 9: Admin Panel <!-- id: 30 -->
+    - [/] Epic 9: Admin Panel <!-- id: 30 -->
+        - [x] Story 9.1: Admin Dashboard
+            - [x] Task 9.1.1: Create dashboard stats API (`GET /api/admin/dashboard`)
+            - [x] Task 9.1.2: Build admin dashboard UI
+            - [x] Task 9.1.3: Add stat cards and quick links
 
 - [ ] **Phase 5: Final Polish** <!-- id: 31 -->
     - [ ] Testing & Bug Fixes <!-- id: 32 -->

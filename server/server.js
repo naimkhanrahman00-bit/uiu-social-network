@@ -38,6 +38,7 @@ app.use('/api/section-issue', require('./routes/sectionExchangeRoutes'));
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/messages', require('./routes/messageRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
+app.use('/api/admin', require('./routes/adminRoutes'));
 
 // Make uploads folder static
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));

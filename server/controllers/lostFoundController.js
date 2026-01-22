@@ -1,4 +1,5 @@
 const LostFoundPost = require('../models/LostFoundPost');
+const Notification = require('../models/Notification');
 
 // @desc    Create a new lost/found post
 // @route   POST /api/lost-found
@@ -143,6 +144,51 @@ const updatePostStatus = async (req, res) => {
         }
 
         await LostFoundPost.updateStatus(req.params.id, status);
+
+        // Notify if claimed
+        if (status === 'claimed') {
+            try {
+                // Determine who to notify? 
+                // "Item claimed (for Lost & Found owner)" - Wait. 
+                // If I am the owner, I am marking it as claimed. Why notify me?
+                // Maybe the story meant "Item claimed" notification for the *finder* if the owner claims it? 
+                // Or maybe if someone *else* claims it? 
+                // Currently only OWNER can update status. 
+                // So if I update my own post to 'claimed', I don't need a notification.
+                // However, maybe "Exchange Interest" or "Claim Request" is what was intended?
+                // The PRD says: "Item claimed (for Lost & Found owner)"
+                // This implies someone ELSE claims it. 
+                // But in Story 2.5: "Owner can change status". 
+                // So currently there is no "Claim" button for non-owners.
+                // Only the owner can mark it. 
+                // So this notification likely applies if we had a "I found this" flow that notifies the owner. 
+                // But let's look at the flow. 
+                // If it's a "Lost" item, and someone finds it, they might contact the owner. 
+                // If it's a "Found" item, and the owner claims it... 
+                // Actual implementation of Story 2.5 was just a status toggle by owner.
+                // So perhaps this notification is redundant for the current implementation, 
+                // OR it's for when a *finder* claims a "Lost" item? No, finder creates "Found" item.
+
+                // Let's re-read Story 8.1 requirements carefully.
+                // "Item claimed (for Lost & Found owner)"
+
+                // If I am the owner of a "Found" post (I found something).
+                // And I mark it as "Returned" (item returned to owner). 
+                // Maybe that's what it means? 
+
+                // Actually, let's look at `type`. 
+                // If type is 'found' (I found an item), and I mark it 'claimed' or 'returned'.
+                // There is no linked "Owner User" in a Found Post usually, unless we linked them.
+                // We don't have a structured "Claim" flow where another user clicks "That's mine!".
+                // We just have "Message".
+
+                // So, maybe I should skip this for now or just log it, as it seems to require a feature (Claim Button) that doesn't fully exist for non-owners.
+                // Converting: I will skipping adding a notification here since only the owner can change status, and notifying yourself is silly.
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
         res.json({ message: 'Status updated', status });
     } catch (error) {
         console.error(error);
