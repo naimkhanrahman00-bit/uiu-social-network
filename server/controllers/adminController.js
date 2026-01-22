@@ -550,5 +550,67 @@ module.exports = {
     suspendUser,
     getUserActivity,
     getAllContent,
-    deleteContent
+    deleteContent,
+
+    /**
+     * @desc    Get analytics data for charts
+     * @route   GET /api/admin/analytics
+     * @access  Private/Admin
+     */
+    getAnalytics: async (req, res) => {
+        try {
+            // 1. User Registrations (Last 30 Days)
+            // Group by date to show growth trend
+            const [userGrowth] = await db.execute(`
+                SELECT DATE(created_at) as date, COUNT(*) as count 
+                FROM users 
+                WHERE created_at >= DATE(NOW()) - INTERVAL 30 DAY 
+                GROUP BY DATE(created_at) 
+                ORDER BY DATE(created_at) ASC
+            `);
+
+            // 2. Marketplace Listings by Category
+            const [listingsByCategory] = await db.execute(`
+                SELECT c.name, COUNT(l.id) as count 
+                FROM marketplace_listings l
+                JOIN marketplace_categories c ON l.category_id = c.id
+                WHERE l.status = 'active'
+                GROUP BY c.name
+            `);
+
+            // 3. Lost vs Found Posts Ratio
+            const [lostFoundRatio] = await db.execute(`
+                SELECT type, COUNT(*) as count 
+                FROM lost_found_posts 
+                WHERE status IN ('lost', 'found')
+                GROUP BY type
+            `);
+
+            // 4. Top 5 Downloaded Resources
+            const [topResources] = await db.execute(`
+                SELECT title, download_count 
+                FROM resources 
+                ORDER BY download_count DESC 
+                LIMIT 5
+            `);
+
+            res.json({
+                success: true,
+                data: {
+                    userGrowth,
+                    listingsByCategory,
+                    lostFoundRatio,
+                    topResources
+                }
+            });
+
+        } catch (error) {
+            console.error('Error fetching analytics:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Error fetching analytics data',
+                error: error.message
+            });
+        }
+    }
 };

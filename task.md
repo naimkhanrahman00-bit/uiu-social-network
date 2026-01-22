@@ -173,6 +173,9 @@
             - [x] Task 9.3.1: Create get all content API (`GET /api/admin/content`)
             - [x] Task 9.3.2: Create delete content API (`DELETE /api/admin/content/:type/:id`)
             - [x] Task 9.3.3: Build content moderation UI
+        - [x] Story 9.4: Analytics
+            - [x] Task 9.4.1: Create analytics APIs
+            - [x] Task 9.4.2: Build analytics dashboard with charts
 
 - [ ] **Phase 5: Final Polish** <!-- id: 31 -->
     - [ ] Testing & Bug Fixes <!-- id: 32 -->

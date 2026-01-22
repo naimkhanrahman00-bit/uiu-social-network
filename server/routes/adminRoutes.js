@@ -39,4 +39,9 @@ router.get('/content', protect, admin, adminController.getAllContent);
 // @access  Private/Admin
 router.delete('/content/:type/:id', protect, admin, adminController.deleteContent);
 
+// @route   GET /api/admin/analytics
+// @desc    Get analytics data for charts
+// @access  Private/Admin
+router.get('/analytics', protect, admin, adminController.getAnalytics);
+
 module.exports = router;

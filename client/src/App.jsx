@@ -39,6 +39,7 @@ import Messages from './pages/Messages/Messages';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import Users from './pages/Admin/Users';
 import ContentModeration from './pages/Admin/ContentModeration';
+import Analytics from './pages/Admin/Analytics';
 
 console.log("App.jsx module loaded");
 
@@ -216,6 +217,16 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ContentModeration />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Admin Analytics Route */}
+            <Route
+              path="/admin/analytics"
+              element={
+                <ProtectedRoute>
+                  <Analytics />
                 </ProtectedRoute>
               }
             />

@@ -79,6 +79,9 @@ const Navbar = () => {
                                     <Link to="/admin/courses" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
                                         Manage Courses
                                     </Link>
+                                    <Link to="/admin/analytics" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
+                                        Analytics
+                                    </Link>
                                     <Link to="/admin/settings" style={{ fontWeight: '500', color: 'var(--primary-color)', textDecoration: 'none', marginRight: '1rem' }}>
                                         Settings
                                     </Link>
