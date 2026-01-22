@@ -35,4 +35,12 @@ const admin = (req, res, next) => {
     }
 };
 
-module.exports = { protect, admin };
+const moderator = (req, res, next) => {
+    if (req.user && (req.user.role === 'admin' || req.user.role === 'moderator')) {
+        next();
+    } else {
+        res.status(401).json({ message: 'Not authorized as a moderator' });
+    }
+};
+
+module.exports = { protect, admin, moderator };
