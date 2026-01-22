@@ -87,9 +87,9 @@
             - [x] Task 4.6.1: Create course CRUD APIs (admin only)
             - [x] Task 4.6.2: Build course management UI in admin panel
             - [x] Task 4.6.3: Seed initial department and course data
-    - [/] Epic 5: Section Issue <!-- id: 26 -->
-        - [/] Story 5.1: Admin - Toggle Section Issue Feature
-            - [/] Task 5.1.1: Create system_settings table
+    - [x] Epic 5: Section Issue <!-- id: 26 -->
+        - [x] Story 5.1: Admin - Toggle Section Issue Feature
+            - [x] Task 5.1.1: Create system_settings table
             - [x] Task 5.1.2: Create toggle API (`PATCH /api/admin/settings/section-issue`)
             - [x] Task 5.1.3: Create get settings API (`GET /api/settings`)
             - [x] Task 5.1.4: Add toggle switch in admin panel
@@ -103,10 +103,31 @@
             - [x] Task 5.3.1: Create get exchange posts API (`GET /api/section-issue/exchange`)
             - [x] Task 5.3.2: Build exchange posts feed UI
             - [x] Task 5.3.3: Add filter by course
-        - [ ] Story 5.4: Post New Section Request
-        - [ ] Story 5.5: Support New Section Request
-        - [ ] Story 5.6: Moderator - Approve Section Posts
-    - [ ] Epic 6: Feedback & Reviews <!-- id: 27 -->
+        - [x] Story 5.4: Post New Section Request
+        - [x] Story 5.5: Support New Section Request
+        - [x] Story 5.6: Moderator - Approve Section Posts
+    - [/] Epic 6: Feedback & Reviews <!-- id: 27 -->
+        - [x] Story 6.1: Post General Issue
+            - [x] Task 6.1.1: Create feedback_posts table
+            - [x] Task 6.1.2: Create post feedback API (`POST /api/feedback/general`)
+            - [x] Task 6.1.3: Build general issue form UI
+            - [x] Task 6.1.4: Add anonymity toggle
+        - [ ] Story 6.2: Post Canteen/Food Feedback
+            - [ ] Task 6.2.1: Extend feedback_posts table for images
+            - [ ] Task 6.2.2: Create post API (`POST /api/feedback/canteen`)
+            - [ ] Task 6.2.3: Build canteen feedback form UI with image upload
+        - [ ] Story 6.3: Browse Feedback Posts
+            - [ ] Task 6.3.1: Create get feedback API (`GET /api/feedback`)
+            - [ ] Task 6.3.2: Build feedback feed UI with tabs
+            - [ ] Task 6.3.3: Add pagination
+        - [ ] Story 6.4: Moderator - Approve Feedback
+            - [ ] Task 6.4.1: Create pending feedback API (`GET /api/feedback/pending`) - mod only
+            - [ ] Task 6.4.2: Create approve/reject API (`PATCH /api/feedback/:id/status`)
+            - [ ] Task 6.4.3: Build moderation UI
+        - [ ] Story 6.5: Admin - Respond to Feedback
+            - [ ] Task 6.5.1: Create admin_responses table
+            - [ ] Task 6.5.2: Create respond API (`POST /api/feedback/:id/respond`) - admin only
+            - [ ] Task 6.5.3: Display admin response in feedback detail view
     - [ ] Epic 7: Messaging <!-- id: 28 -->
     - [ ] Epic 8: Notifications <!-- id: 29 -->
     - [ ] Epic 9: Admin Panel <!-- id: 30 -->

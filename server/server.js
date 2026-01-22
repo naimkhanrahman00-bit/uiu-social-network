@@ -25,6 +25,7 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const lostFoundRoutes = require('./routes/lostFoundRoutes');
 const marketplaceRoutes = require('./routes/marketplaceRoutes');
+const feedbackRoutes = require('./routes/feedbackRoutes');
 
 // Use Routes
 app.use('/api/auth', authRoutes);
@@ -34,6 +35,7 @@ app.use('/api/marketplace', marketplaceRoutes);
 app.use('/api/resources', require('./routes/resourceRoutes'));
 app.use('/api/settings', require('./routes/systemSettingsRoutes'));
 app.use('/api/section-issue', require('./routes/sectionExchangeRoutes'));
+app.use('/api/feedback', feedbackRoutes);
 
 // Make uploads folder static
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
